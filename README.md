@@ -1,71 +1,55 @@
-# DevForge
 
-A modern, full-featured development platform built with React, TypeScript, and Vite.
+<br />
+<div align="center">
+  <h1 align="center">
+    DevForge
+  </h1>
 
-## Table of Contents
+  <p align="center">
+    Your Modern Development Workspace
+    <br />
+    <br />
+    <a href="https://github.com/lelixn/DevForge">View Demo</a>
+    ·
+    <a href="https://github.com/lelixn/DevForge/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/lelixn/DevForge/issues">Request Feature</a>
+  </p>
+</div>
 
-- [About](#about)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
-- [Scripts](#scripts)
-- [Contributing](#contributing)
-- [License](#license)
+## About The Project
 
-## About
+DevForge is a professional development platform designed for teams and individual developers. It provides a comprehensive set of tools for project management, task tracking, analytics, AI integration, and more — all in one beautiful, modern interface.
 
-DevForge is a professional development workspace designed for teams and individual developers. It provides a comprehensive set of tools for project management, task tracking, analytics, AI integration, and more.
+### Built With
+
+- [![React][React.js]][React-url]
+- [![TypeScript][TypeScript]][TypeScript-url]
+- [![Vite][Vite]][Vite-url]
+- [![Tailwind CSS][TailwindCSS]][Tailwind-url]
+- [![TanStack][TanStack]][TanStack-url]
+- [![Zustand][Zustand]][Zustand-url]
 
 ## Features
 
-- 🚀 **Fast & Modern**: Built with Vite for lightning-fast development
-- 🎨 **Beautiful UI**: Modern, responsive interface with Tailwind CSS
-- 📊 **Analytics Dashboard**: Real-time project and team metrics
-- 📝 **Task Management**: Organize and track project tasks efficiently
-- 📁 **Project Workspace**: Manage multiple projects with ease
-- 🔧 **API Workspace**: Integrate and test APIs seamlessly
-- 🤖 **AI Integration**: Leverage AI capabilities for enhanced productivity
-- 📚 **Documentation**: Built-in documentation viewer
-- 🎯 **Team Collaboration**: Work together with your team
-- ⚙️ **Customizable Settings**: Personalize your workspace
-- 🔍 **Powerful Search**: Find what you need quickly
-- 🔔 **Notifications**: Stay updated with real-time alerts
-- 🌙 **Dark/Light Theme**: Switch between themes
-
-## Tech Stack
-
-### Core Technologies
-
-- **React 19** - UI library
-- **TypeScript** - Type-safe development
-- **Vite** - Build tool and dev server
-- **Tailwind CSS** - Utility-first CSS framework
-
-### Key Dependencies
-
-- **@tanstack/react-router** - File-based routing
-- **@tanstack/react-query** - Data fetching and caching
-- **Zustand** - State management
-- **Radix UI** - Accessible UI primitives
-- **Lucide React** - Beautiful icons
-- **Framer Motion** - Animations
-- **Sonner** - Toast notifications
-- **React Hook Form** - Form handling
-- **Zod** - Schema validation
-- **Recharts** - Charts and data visualization
-- **Axios** - HTTP client
-- **cmdk** - Command palette
-
-### Development Tools
-
-- **ESLint** - Linting
-- **Prettier** - Code formatting
-- **Husky** - Git hooks
-- **lint-staged** - Lint staged files
-- **Oxlint** - Fast linter
+- 🚀 **Fast & Modern** - Built with Vite for lightning-fast development and HMR
+- 🎨 **Beautiful UI** - Modern, responsive interface with Tailwind CSS and Radix UI primitives
+- 📊 **Analytics Dashboard** - Real-time project and team metrics with Recharts
+- 📝 **Task Management** - Organize and track project tasks efficiently
+- 📁 **Project Workspace** - Manage multiple projects with ease
+- 🔧 **API Workspace** - Integrate and test APIs seamlessly
+- 🤖 **AI Integration** - Leverage AI capabilities for enhanced productivity
+- 📚 **Documentation** - Built-in documentation viewer
+- 🎯 **Team Collaboration** - Work together with your team
+- ⚙️ **Customizable Settings** - Personalize your workspace
+- 🔍 **Powerful Search** - Find what you need quickly with command palette
+- 🔔 **Notifications** - Stay updated with real-time alerts (Sonner)
+- 🌙 **Dark/Light Theme** - Switch between themes with ThemeProvider
+- 📱 **Responsive Design** - Works perfectly on all devices
 
 ## Getting Started
+
+To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
@@ -74,27 +58,26 @@ DevForge is a professional development workspace designed for teams and individu
 
 ### Installation
 
-1. Clone the repository:
+1. Clone the repo
 
 ```bash
 git clone https://github.com/lelixn/DevForge.git
-cd DevForge
 ```
 
-2. Install dependencies:
+2. Install NPM packages
 
 ```bash
 npm install
 ```
 
-3. Set up environment variables:
+3. Set up environment variables
 
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
 ```
 
-4. Start the development server:
+4. Start the development server
 
 ```bash
 npm run dev
@@ -112,14 +95,14 @@ DevForge/
 │   ├── assets/            # Images and other assets
 │   ├── components/        # Reusable components
 │   │   ├── shared/        # Shared components
-│   │   └── ui/            # UI primitives
+│   │   └── ui/            # UI primitives (Radix UI)
 │   ├── features/          # Feature modules
 │   ├── hooks/             # Custom hooks
-│   ├── layouts/           # Layout components
-│   ├── routes/            # Route definitions
-│   ├── services/          # API services
+│   ├── layouts/           # Layout components (AppShell, Header, Sidebar)
+│   ├── routes/            # Route definitions (TanStack Router)
+│   ├── services/          # API services (Axios)
 │   ├── shared/            # Shared utilities and data
-│   ├── stores/            # Zustand stores
+│   ├── stores/            # Zustand state management
 │   ├── styles/            # Global styles
 │   ├── types/             # TypeScript types
 │   └── utils/             # Utility functions
@@ -135,20 +118,64 @@ DevForge/
 
 ## Scripts
 
-| Script             | Description               |
-| ------------------ | ------------------------- |
-| `npm run dev`      | Start development server  |
-| `npm run build`    | Build for production      |
-| `npm run preview`  | Preview production build  |
-| `npm run lint`     | Run ESLint                |
-| `npm run lint:fix` | Fix linting issues        |
-| `npm run format`   | Format code with Prettier |
-| `npm run prepare`  | Set up Husky git hooks    |
+| Script           | Description                                      |
+|------------------|--------------------------------------------------|
+| `npm run dev`    | Start development server                         |
+| `npm run build`  | Build for production                             |
+| `npm run preview`| Preview production build                         |
+| `npm run lint`   | Run ESLint                                       |
+| `npm run lint:fix` | Fix linting issues                              |
+| `npm run format` | Format code with Prettier                        |
+| `npm run prepare`| Set up Husky git hooks                           |
+
+## Roadmap
+
+- [ ] Add authentication
+- [ ] Add database integration
+- [ ] Add more AI features
+- [ ] Add team chat
+- [ ] Add file uploads
+- [ ] Add more customization options
+
+See the [open issues](https://github.com/lelixn/DevForge/issues) for a full list of proposed features (and known issues).
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## License
 
-MIT
+Distributed under the MIT License. See `LICENSE.txt` for more information.
+
+## Contact
+
+Project Link: [https://github.com/lelixn/DevForge](https://github.com/lelixn/DevForge)
+
+## Acknowledgments
+
+- [Radix UI](https://www.radix-ui.com/)
+- [Lucide](https://lucide.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [TanStack](https://tanstack.com/)
+
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[TypeScript]: https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white
+[TypeScript-url]: https://www.typescriptlang.org/
+[Vite]: https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white
+[Vite-url]: https://vitejs.dev/
+[TailwindCSS]: https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white
+[Tailwind-url]: https://tailwindcss.com/
+[TanStack]: https://img.shields.io/badge/TanStack-FF4154?style=for-the-badge&logo=tanstack&logoColor=white
+[TanStack-url]: https://tanstack.com/
+[Zustand]: https://img.shields.io/badge/Zustand-000000?style=for-the-badge&logo=zustand&logoColor=white
+[Zustand-url]: https://github.com/pmndrs/zustand
