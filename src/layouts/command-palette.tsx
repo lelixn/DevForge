@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
@@ -102,38 +102,61 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const filtered = query
-    ? COMMANDS.filter((c) => c.label.toLowerCase().includes(query.toLowerCase()))
-    : COMMANDS;
+  // Memoize filtered array
+  const filtered = useMemo(() => {
+    return query
+      ? COMMANDS.filter((c) => c.label.toLowerCase().includes(query.toLowerCase()))
+      : COMMANDS;
+  }, [query]);
 
-  // Group by category
-  const grouped = filtered.reduce<Record<string, typeof COMMANDS>>((acc, cmd) => {
-    acc[cmd.category] = acc[cmd.category] || [];
-    acc[cmd.category].push(cmd);
-    return acc;
-  }, {});
+  // Memoize grouped commands
+  const grouped = useMemo(() => {
+    return filtered.reduce<Record<string, typeof COMMANDS>>((acc, cmd) => {
+      acc[cmd.category] = acc[cmd.category] || [];
+      acc[cmd.category].push(cmd);
+      return acc;
+    }, {});
+  }, [filtered]);
+
+  // Reset selected index when query changes
+  const currentSelectedIndex = useMemo(() => {
+    return Math.min(selectedIndex, Math.max(0, filtered.length - 1));
+  }, [filtered.length, selectedIndex]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (!open) return;
       if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowDown') setSelectedIndex((p) => Math.min(p + 1, filtered.length - 1));
-      if (e.key === 'ArrowUp') setSelectedIndex((p) => Math.max(p - 1, 0));
+      if (e.key === 'ArrowDown') {
+        setSelectedIndex((p) => Math.min(p + 1, filtered.length - 1));
+      }
+      if (e.key === 'ArrowUp') {
+        setSelectedIndex((p) => Math.max(p - 1, 0));
+      }
     },
     [open, onClose, filtered.length]
   );
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleKeyDown]);
+    if (open) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+    return undefined;
+  }, [handleKeyDown, open]);
 
+  // Reset selected index when query or filtered changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelectedIndex(0);
-  }, [query]);
+  }, [filtered]);
 
+  // Reset query when closed
   useEffect(() => {
-    if (!open) setQuery('');
+    if (!open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setQuery('');
+    }
   }, [open]);
 
   return (
@@ -182,7 +205,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                   </p>
                   {items.map((cmd, i) => {
                     const globalIdx = filtered.indexOf(cmd);
-                    const isSelected = globalIdx === selectedIndex;
+                    const isSelected = globalIdx === currentSelectedIndex;
                     return (
                       <button
                         key={i}
