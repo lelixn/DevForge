@@ -10,7 +10,6 @@ import {
   Zap,
   ArrowRight,
   GitBranch,
-  Circle,
   Plus,
   MoreHorizontal,
   Code2,
@@ -20,11 +19,12 @@ import {
 } from 'lucide-react';
 import { PageContainer, PageHeader } from '@/components/shared/page-container';
 import { StatCard } from '@/components/shared/stat-card';
-import { GlassCard } from '@/components/shared/glass-card';
-import { GradientButton } from '@/components/shared/gradient-button';
 import { IconButton } from '@/components/shared/icon-button';
 import { MetricCard } from '@/components/shared/metric-card';
-import { Badge } from '@/components/shared/badge';
+import { ForgeCard } from '@/components/forge/ForgeCard';
+import { ForgeButton } from '@/components/forge/ForgeButton';
+import { ForgeBadge } from '@/components/forge/ForgeBadge';
+import { ForgeAvatar } from '@/components/forge/ForgeAvatar';
 import { cn } from '@/utils/cn';
 
 export const Route = createFileRoute('/')({
@@ -124,7 +124,7 @@ const PROJECT_CARDS = [
     progress: 20,
     issues: 21,
     status: 'backlog',
-    color: 'bg-[var(--df-info)]',
+    color: 'bg-[var(--df-muted-foreground)]',
   },
 ];
 
@@ -177,7 +177,13 @@ const UPCOMING_TASKS = [
     assignee: 'SK',
     label: 'Frontend',
   },
-  { id: 't3', title: 'Write API rate limit specs', priority: 'Low', assignee: 'JD', label: 'Docs' },
+  {
+    id: 't3',
+    title: 'Write API rate limit specs',
+    priority: 'Low',
+    assignee: 'JD',
+    label: 'Docs',
+  },
 ];
 
 const SYSTEM_HEALTH = [
@@ -190,7 +196,7 @@ const activityIconMap: Record<string, { icon: React.ReactNode; color: string }> 
   commit: { icon: <GitCommit className="h-3.5 w-3.5" />, color: 'text-[var(--df-primary)]' },
   deploy: { icon: <CheckCircle2 className="h-3.5 w-3.5" />, color: 'text-[var(--df-success)]' },
   issue: { icon: <AlertCircle className="h-3.5 w-3.5" />, color: 'text-[var(--df-warning)]' },
-  pr: { icon: <GitBranch className="h-3.5 w-3.5" />, color: 'text-[var(--df-info)]' },
+  pr: { icon: <GitBranch className="h-3.5 w-3.5" />, color: 'text-[var(--df-accent)]' },
 };
 
 const statusConfig: Record<string, { label: string; color: string; dot: string }> = {
@@ -206,8 +212,8 @@ const statusConfig: Record<string, { label: string; color: string; dot: string }
   },
   backlog: {
     label: 'Backlog',
-    color: 'text-[var(--df-muted-fg)] bg-[var(--df-secondary)]',
-    dot: 'bg-[var(--df-muted-fg)]',
+    color: 'text-[var(--df-muted-foreground)] bg-[var(--df-card)]',
+    dot: 'bg-[var(--df-muted-foreground)]',
   },
 };
 
@@ -237,27 +243,36 @@ function DashboardPage() {
         title="Good morning, John 👋"
         description="Here's what's happening in your workspace today."
       >
-        <GradientButton icon={<Zap className="h-4 w-4" />} size="sm">
+        <ForgeButton glow leftIcon={<Zap className="h-4 w-4" />} size="sm">
           Quick action
-        </GradientButton>
+        </ForgeButton>
       </PageHeader>
 
       {/* Stat Cards */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {STAT_CARDS.map((card) => (
-          <StatCard key={card.title} {...card} />
+        {STAT_CARDS.map((card, i) => (
+          <motion.div
+            key={card.title}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <StatCard {...card} />
+          </motion.div>
         ))}
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-3 mt-6">
         {/* Chart placeholder — 2 cols */}
         <div className="lg:col-span-2">
-          <GlassCard className="h-full">
+          <ForgeCard className="h-full" gradientBorder>
             <div className="mb-5 flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-semibold text-[var(--df-fg)]">Velocity Trends</h2>
-                <p className="mt-0.5 text-xs text-[var(--df-muted-fg)]">
+                <h2 className="text-sm font-semibold text-[var(--df-foreground)]">
+                  Velocity Trends
+                </h2>
+                <p className="mt-0.5 text-xs text-[var(--df-muted-foreground)]">
                   Story points completed per sprint
                 </p>
               </div>
@@ -266,10 +281,10 @@ function DashboardPage() {
                   <button
                     key={p}
                     className={cn(
-                      'rounded-lg px-2.5 py-1 text-xs font-medium transition-colors',
+                      'rounded-lg px-2.5 py-1 text-xs font-medium transition-all',
                       i === 2
                         ? 'bg-[var(--df-primary)]/15 text-[var(--df-primary)]'
-                        : 'text-[var(--df-muted-fg)] hover:text-[var(--df-fg)]'
+                        : 'text-[var(--df-muted-foreground)] hover:text-[var(--df-foreground)]'
                     )}
                   >
                     {p}
@@ -284,7 +299,7 @@ function DashboardPage() {
               <div className="absolute inset-0 flex flex-col justify-between pb-8 pt-2 pointer-events-none">
                 {[100, 75, 50, 25, 0].map((v) => (
                   <div key={v} className="flex items-center gap-2">
-                    <span className="w-6 flex-shrink-0 text-right text-[10px] text-[var(--df-muted-fg)]/50">
+                    <span className="w-6 flex-shrink-0 text-right text-[10px] text-[var(--df-muted-foreground)]/50">
                       {v}
                     </span>
                     <div className="h-px flex-1 bg-[var(--df-border)]/60" />
@@ -308,7 +323,7 @@ function DashboardPage() {
                       style={{ height: `${v}%` }}
                     />
                     {/* Tooltip */}
-                    <div className="absolute -top-7 hidden rounded-lg border border-[var(--df-border)] bg-[var(--df-card)] px-2 py-1 text-[10px] font-medium text-[var(--df-fg)] shadow-lg group-hover:block">
+                    <div className="absolute -top-7 hidden rounded-lg border border-[var(--df-border)] bg-[var(--df-card)] px-2 py-1 text-[10px] font-medium text-[var(--df-foreground)] shadow-lg group-hover:block">
                       {v}pts
                     </div>
                   </motion.div>
@@ -320,7 +335,7 @@ function DashboardPage() {
                 {CHART_LABELS.map((l) => (
                   <span
                     key={l}
-                    className="flex-1 text-center text-[10px] text-[var(--df-muted-fg)]/60"
+                    className="flex-1 text-center text-[10px] text-[var(--df-muted-foreground)]/60"
                   >
                     {l}
                   </span>
@@ -336,11 +351,11 @@ function DashboardPage() {
                 { label: 'Trend', value: '+18%', positive: true },
               ].map((s) => (
                 <div key={s.label}>
-                  <p className="text-xs text-[var(--df-muted-fg)]">{s.label}</p>
+                  <p className="text-xs text-[var(--df-muted-foreground)]">{s.label}</p>
                   <p
                     className={cn(
                       'mt-0.5 text-sm font-semibold',
-                      s.positive ? 'text-[var(--df-success)]' : 'text-[var(--df-fg)]'
+                      s.positive ? 'text-[var(--df-success)]' : 'text-[var(--df-foreground)]'
                     )}
                   >
                     {s.value}
@@ -348,14 +363,16 @@ function DashboardPage() {
                 </div>
               ))}
             </div>
-          </GlassCard>
+          </ForgeCard>
         </div>
 
         {/* Quick Actions & AI Insight — 1 col */}
         <div className="flex flex-col gap-4">
           {/* Quick Actions */}
-          <GlassCard>
-            <h2 className="mb-4 text-sm font-semibold text-[var(--df-fg)]">Quick Actions</h2>
+          <ForgeCard>
+            <h2 className="mb-4 text-sm font-semibold text-[var(--df-foreground)]">
+              Quick Actions
+            </h2>
             <div className="grid grid-cols-2 gap-2">
               {QUICK_ACTIONS.map((action) => (
                 <motion.button
@@ -363,31 +380,33 @@ function DashboardPage() {
                   whileHover={{ scale: 1.03, y: -1 }}
                   whileTap={{ scale: 0.97 }}
                   transition={{ duration: 0.12 }}
-                  className="flex flex-col items-start gap-2 rounded-xl border border-[var(--df-border)] bg-[var(--df-secondary)] p-3 text-left transition-colors hover:border-[var(--df-border-strong)] hover:bg-[var(--df-subtle)]"
+                  className="flex flex-col items-start gap-2 rounded-xl border border-[var(--df-border)] bg-[var(--df-card)] p-3 text-left transition-colors hover:border-[var(--df-border-strong)]"
                 >
                   <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--df-primary)]/10 text-[var(--df-primary)]">
                     {action.icon}
                   </span>
                   <div>
-                    <p className="text-xs font-medium text-[var(--df-fg)]">{action.label}</p>
-                    <kbd className="text-[10px] text-[var(--df-muted-fg)]">{action.shortcut}</kbd>
+                    <p className="text-xs font-medium text-[var(--df-foreground)]">{action.label}</p>
+                    <kbd className="text-[10px] text-[var(--df-muted-foreground)]">{action.shortcut}</kbd>
                   </div>
                 </motion.button>
               ))}
             </div>
-          </GlassCard>
+          </ForgeCard>
 
           {/* AI Insight card */}
-          <div className="relative overflow-hidden rounded-2xl border border-[var(--df-primary)]/20 bg-gradient-to-br from-[var(--df-primary)]/10 via-[var(--df-card)] to-[var(--df-card)] p-5">
+          <div className="relative overflow-hidden rounded-2xl border border-[var(--df-primary)]/20 bg-gradient-to-br from-[var(--df-primary)]/10 via-[var(--df-card)] to-[var(--df-card)] p-5 shadow-[var(--df-shadow-glow)]">
             <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-[var(--df-primary)]/10 blur-2xl" />
             <div className="relative">
               <div className="mb-3 flex items-center gap-2">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--df-primary)]/20 text-[var(--df-primary)]">
                   <Sparkles className="h-4 w-4" />
                 </div>
-                <span className="text-xs font-semibold text-[var(--df-primary)]">AI Insight</span>
+                <ForgeBadge variant="primary" size="sm">
+                  AI Insight
+                </ForgeBadge>
               </div>
-              <p className="text-xs leading-relaxed text-[var(--df-muted-fg)]">
+              <p className="text-xs leading-relaxed text-[var(--df-muted-foreground)]">
                 Based on sprint velocity, your team will likely miss the Q3 deadline by{' '}
                 <span className="text-[var(--df-warning)] font-medium">3 days</span>. Consider
                 descoping 2 lower-priority issues.
@@ -401,12 +420,12 @@ function DashboardPage() {
       </div>
 
       {/* Bottom Row — Recent Activity & Projects */}
-      <div className="grid gap-4 lg:grid-cols-5">
+      <div className="grid gap-4 lg:grid-cols-5 mt-6">
         {/* Recent Activity */}
         <div className="lg:col-span-2">
-          <GlassCard className="h-full">
+          <ForgeCard className="h-full">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-[var(--df-fg)]">Recent Activity</h2>
+              <h2 className="text-sm font-semibold text-[var(--df-foreground)]">Recent Activity</h2>
               <IconButton icon={<Activity className="h-4 w-4" />} label="View all" size="xs" />
             </div>
             <div className="flex flex-col gap-0">
@@ -424,24 +443,17 @@ function DashboardPage() {
                     )}
                   >
                     {/* Avatar */}
-                    <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[var(--df-primary)] to-[var(--df-accent)] text-[9px] font-bold text-white">
-                      {item.avatar}
-                    </div>
+                    <ForgeAvatar name={item.avatar} size="sm" />
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-medium text-[var(--df-fg)]">
-                        <span className="text-[var(--df-muted-fg)]">{item.user}</span> — {item.msg}
+                      <p className="text-xs font-medium text-[var(--df-foreground)]">
+                        <span className="text-[var(--df-muted-foreground)]">{item.user}</span> — {item.msg}
                       </p>
                       <div className="mt-0.5 flex items-center gap-1.5">
-                        <span
-                          className={cn(
-                            'flex items-center gap-0.5 text-[10px] font-medium',
-                            meta.color
-                          )}
-                        >
+                        <span className={cn('flex items-center gap-0.5 text-[10px] font-medium', meta.color)}>
                           {meta.icon}
                           {item.repo}
                         </span>
-                        <span className="text-[10px] text-[var(--df-muted-fg)]/60">
+                        <span className="text-[10px] text-[var(--df-muted-foreground)]/60">
                           {item.time}
                         </span>
                       </div>
@@ -450,14 +462,14 @@ function DashboardPage() {
                 );
               })}
             </div>
-          </GlassCard>
+          </ForgeCard>
         </div>
 
         {/* Projects */}
         <div className="lg:col-span-3">
-          <GlassCard className="h-full">
+          <ForgeCard className="h-full">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-[var(--df-fg)]">Active Projects</h2>
+              <h2 className="text-sm font-semibold text-[var(--df-foreground)]">Active Projects</h2>
               <button className="flex items-center gap-1 text-xs font-medium text-[var(--df-primary)] hover:underline">
                 View all <ArrowRight className="h-3 w-3" />
               </button>
@@ -473,7 +485,7 @@ function DashboardPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.07 }}
                     whileHover={{ x: 2 }}
-                    className="flex cursor-pointer items-center gap-3 rounded-xl border border-[var(--df-border)] bg-[var(--df-secondary)]/50 p-3 transition-all hover:border-[var(--df-border-strong)] hover:bg-[var(--df-secondary)]"
+                    className="flex cursor-pointer items-center gap-3 rounded-xl border border-[var(--df-border)] bg-[var(--df-card)] p-3 transition-all hover:border-[var(--df-border-strong)]"
                   >
                     {/* Color dot */}
                     <div className={cn('h-8 w-1 flex-shrink-0 rounded-full', proj.color)} />
@@ -481,21 +493,22 @@ function DashboardPage() {
                     {/* Info */}
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2">
-                        <p className="text-sm font-medium text-[var(--df-fg)]">{proj.name}</p>
-                        <span
-                          className={cn(
-                            'flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium',
-                            status.color
-                          )}
+                        <p className="text-sm font-medium text-[var(--df-foreground)]">{proj.name}</p>
+                        <ForgeBadge
+                          variant={
+                            proj.status === 'active' ? 'success' :
+                            proj.status === 'in-review' ? 'warning' : 'default'
+                          }
+                          size="sm"
+                          dot
                         >
-                          <Circle className={cn('h-1.5 w-1.5 fill-current', status.dot)} />
                           {status.label}
-                        </span>
+                        </ForgeBadge>
                       </div>
                       <div className="mt-1.5 flex items-center gap-3">
                         {/* Progress bar */}
                         <div className="flex flex-1 items-center gap-2">
-                          <div className="h-1 flex-1 overflow-hidden rounded-full bg-[var(--df-subtle)]">
+                          <div className="h-1 flex-1 overflow-hidden rounded-full bg-[var(--df-border)]">
                             <motion.div
                               initial={{ width: 0 }}
                               animate={{ width: `${proj.progress}%` }}
@@ -507,12 +520,12 @@ function DashboardPage() {
                               className={cn('h-full rounded-full', proj.color)}
                             />
                           </div>
-                          <span className="flex-shrink-0 text-[10px] text-[var(--df-muted-fg)]">
+                          <span className="flex-shrink-0 text-[10px] text-[var(--df-muted-foreground)]">
                             {proj.progress}%
                           </span>
                         </div>
                         {/* Meta */}
-                        <div className="flex items-center gap-2 text-[10px] text-[var(--df-muted-fg)]">
+                        <div className="flex items-center gap-2 text-[10px] text-[var(--df-muted-foreground)]">
                           <span className="flex items-center gap-0.5">
                             <Code2 className="h-3 w-3" /> {proj.lang}
                           </span>
@@ -528,17 +541,19 @@ function DashboardPage() {
                 );
               })}
             </div>
-          </GlassCard>
+          </ForgeCard>
         </div>
       </div>
 
       {/* New Section: Deployments, Upcoming Tasks, and System Health */}
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-3 mt-6">
         {/* Recent Deployments */}
-        <GlassCard>
+        <ForgeCard>
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-[var(--df-fg)]">Recent Deployments</h2>
-            <IconButton icon={<Plus className="h-4 w-4" />} size="xs" />
+            <h2 className="text-sm font-semibold text-[var(--df-foreground)]">Recent Deployments</h2>
+            <ForgeButton variant="ghost" size="sm">
+              <Plus className="h-4 w-4" />
+            </ForgeButton>
           </div>
           <div className="flex flex-col gap-3">
             {RECENT_DEPLOYMENTS.map((d, i) => (
@@ -548,26 +563,30 @@ function DashboardPage() {
               >
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-[var(--df-fg)]">{d.env}</span>
-                    <Badge variant={d.status === 'success' ? 'success' : 'warning'} size="xs">
+                    <span className="text-xs font-semibold text-[var(--df-foreground)]">{d.env}</span>
+                    <ForgeBadge
+                      variant={d.status === 'success' ? 'success' : 'warning'}
+                      size="sm"
+                      dot
+                    >
                       {d.status === 'success' ? 'Success' : 'Running'}
-                    </Badge>
+                    </ForgeBadge>
                   </div>
-                  <p className="mt-1 text-[10px] text-[var(--df-muted-fg)]">{d.commit}</p>
+                  <p className="mt-1 text-[10px] text-[var(--df-muted-foreground)]">{d.commit}</p>
                 </div>
                 <div className="text-right">
                   <span className="font-mono text-xs text-[var(--df-primary)]">{d.version}</span>
-                  <p className="text-[9px] text-[var(--df-muted-fg)]">{d.time}</p>
+                  <p className="text-[9px] text-[var(--df-muted-foreground)]">{d.time}</p>
                 </div>
               </div>
             ))}
           </div>
-        </GlassCard>
+        </ForgeCard>
 
         {/* Upcoming Tasks */}
-        <GlassCard>
+        <ForgeCard>
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-[var(--df-fg)]">Upcoming Tasks</h2>
+            <h2 className="text-sm font-semibold text-[var(--df-foreground)]">Upcoming Tasks</h2>
             <button className="text-xs font-medium text-[var(--df-primary)] hover:underline">
               View Kanban
             </button>
@@ -576,44 +595,39 @@ function DashboardPage() {
             {UPCOMING_TASKS.map((t) => (
               <div
                 key={t.id}
-                className="flex items-center justify-between rounded-xl border border-[var(--df-border)] bg-[var(--df-secondary)]/30 p-3 hover:border-[var(--df-border-strong)] transition-all"
+                className="flex items-center justify-between rounded-xl border border-[var(--df-border)] bg-[var(--df-card)] p-3 hover:border-[var(--df-border-strong)] transition-all"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="inline-flex rounded bg-[var(--df-primary)]/10 px-1.5 py-0.5 text-[9px] font-medium text-[var(--df-primary)]">
+                    <ForgeBadge variant="primary" size="sm">
                       {t.label}
-                    </span>
-                    <span className="truncate text-xs font-medium text-[var(--df-fg)]">
+                    </ForgeBadge>
+                    <span className="truncate text-xs font-medium text-[var(--df-foreground)]">
                       {t.title}
                     </span>
                   </div>
                 </div>
                 <div className="ml-3 flex items-center gap-2 flex-shrink-0">
-                  <span
-                    className={cn(
-                      'rounded px-1.5 py-0.5 text-[9px] font-semibold border',
-                      t.priority === 'High'
-                        ? 'text-[var(--df-danger)] bg-[var(--df-danger)]/10 border-[var(--df-danger)]/20'
-                        : t.priority === 'Medium'
-                          ? 'text-[var(--df-warning)] bg-[var(--df-warning)]/10 border-[var(--df-warning)]/20'
-                          : 'text-[var(--df-success)] bg-[var(--df-success)]/10 border-[var(--df-success)]/20'
-                    )}
+                  <ForgeBadge
+                    variant={
+                      t.priority === 'High' ? 'danger'
+                      : t.priority === 'Medium' ? 'warning' : 'success'
+                    }
+                    size="sm"
                   >
                     {t.priority}
-                  </span>
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-[var(--df-primary)] to-[var(--df-accent)] text-[9px] font-bold text-white">
-                    {t.assignee}
-                  </div>
+                  </ForgeBadge>
+                  <ForgeAvatar name={t.assignee} size="sm" />
                 </div>
               </div>
             ))}
           </div>
-        </GlassCard>
+        </ForgeCard>
 
         {/* System Health */}
-        <GlassCard>
+        <ForgeCard>
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-[var(--df-fg)]">System Health</h2>
+            <h2 className="text-sm font-semibold text-[var(--df-foreground)]">System Health</h2>
             <div className="flex items-center gap-1.5 text-[10px] text-[var(--df-success)]">
               <ShieldCheck className="h-3.5 w-3.5" /> All systems operational
             </div>
@@ -625,21 +639,21 @@ function DashboardPage() {
                 className="flex items-center justify-between border-b border-[var(--df-border)]/60 pb-3 last:border-0 last:pb-0"
               >
                 <div>
-                  <p className="text-xs font-semibold text-[var(--df-fg)]">{s.name}</p>
-                  <p className="text-[9px] text-[var(--df-muted-fg)]">Uptime: {s.uptime}</p>
+                  <p className="text-xs font-semibold text-[var(--df-foreground)]">{s.name}</p>
+                  <p className="text-[9px] text-[var(--df-muted-foreground)]">Uptime: {s.uptime}</p>
                 </div>
                 <div className="text-right">
                   <span className="text-xs font-mono text-[var(--df-success)]">{s.latency}</span>
-                  <p className="text-[9px] text-[var(--df-muted-fg)]">Response time</p>
+                  <p className="text-[9px] text-[var(--df-muted-foreground)]">Response time</p>
                 </div>
               </div>
             ))}
           </div>
-        </GlassCard>
+        </ForgeCard>
       </div>
 
       {/* Metric Row */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 mt-6">
         <MetricCard label="Sprint Burndown" value="67" unit="%" progress={67} color="primary" />
         <MetricCard label="Code Coverage" value="84" unit="%" progress={84} color="success" />
         <MetricCard label="Bug Rate" value="3.2" unit="/week" progress={32} color="warning" />

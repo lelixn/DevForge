@@ -18,9 +18,10 @@ import {
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useTheme } from '@/hooks/use-theme';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { IconButton } from '@/components/shared/icon-button';
 import { Separator } from '@/components/ui/separator';
+import { ForgeAvatar } from '@/components/forge/ForgeAvatar';
+import { ForgeBadge } from '@/components/forge/ForgeBadge';
+import { ForgeButton } from '@/components/forge/ForgeButton';
 
 // ---- Breadcrumb ----
 interface BreadcrumbItem {
@@ -39,13 +40,13 @@ function Breadcrumb({ items }: BreadcrumbProps) {
         const isLast = i === items.length - 1;
         return (
           <div key={i} className="flex items-center gap-1">
-            {i > 0 && <ChevronRight className="h-3.5 w-3.5 text-[var(--df-muted-fg)]/50" />}
+            {i > 0 && <ChevronRight className="h-3.5 w-3.5 text-[var(--df-muted-foreground)]" />}
             <span
               className={cn(
                 'font-medium',
                 isLast
-                  ? 'text-[var(--df-fg)]'
-                  : 'text-[var(--df-muted-fg)] hover:text-[var(--df-fg)] transition-colors cursor-pointer'
+                  ? 'text-[var(--df-foreground)]'
+                  : 'text-[var(--df-muted-foreground)] hover:text-[var(--df-foreground)] transition-colors cursor-pointer',
               )}
             >
               {item.label}
@@ -96,12 +97,12 @@ const SAMPLE_NOTIFICATIONS = [
 const typeConfig = {
   success: { icon: <CheckCircle2 className="h-4 w-4" />, color: 'text-[var(--df-success)]' },
   warning: { icon: <AlertCircle className="h-4 w-4" />, color: 'text-[var(--df-warning)]' },
-  info: { icon: <Clock className="h-4 w-4" />, color: 'text-[var(--df-muted-fg)]' },
+  info: { icon: <Clock className="h-4 w-4" />, color: 'text-[var(--df-muted-foreground)]' },
   error: { icon: <AlertCircle className="h-4 w-4" />, color: 'text-[var(--df-danger)]' },
 };
 
 function NotificationPanel({ onClose }: { onClose: () => void }) {
-  const unread = SAMPLE_NOTIFICATIONS.filter((n) => !n.read).length;
+  const unread = SAMPLE_NOTIFICATIONS.filter(n => !n.read).length;
 
   return (
     <motion.div
@@ -109,45 +110,45 @@ function NotificationPanel({ onClose }: { onClose: () => void }) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -4, scale: 0.97 }}
       transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-      className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-2xl border border-[var(--df-border)] bg-[var(--df-card)] shadow-[var(--shadow-float)]"
+      className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-2xl border border-[var(--df-border)] bg-[var(--df-card)] shadow-[var(--df-shadow-lg)]"
     >
       <div className="flex items-center justify-between border-b border-[var(--df-border)] px-4 py-3">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-[var(--df-fg)]">Notifications</span>
+          <span className="text-sm font-semibold text-[var(--df-foreground)]">Notifications</span>
           {unread > 0 && (
-            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[var(--df-primary)] text-[10px] font-bold text-white">
+            <ForgeBadge variant="primary" size="sm">
               {unread}
-            </span>
+            </ForgeBadge>
           )}
         </div>
         <button
           onClick={onClose}
-          className="text-[var(--df-muted-fg)] hover:text-[var(--df-fg)] transition-colors"
+          className="flex h-7 w-7 items-center justify-center rounded-lg text-[var(--df-muted-foreground)] hover:bg-[rgba(148,163,184,0.08)] hover:text-[var(--df-foreground)] transition-colors"
         >
           <X className="h-4 w-4" />
         </button>
       </div>
       <div className="max-h-72 overflow-y-auto">
-        {SAMPLE_NOTIFICATIONS.map((n) => {
+        {SAMPLE_NOTIFICATIONS.map(n => {
           const cfg = typeConfig[n.type as keyof typeof typeConfig];
           return (
             <div
               key={n.id}
               className={cn(
-                'flex gap-3 border-b border-[var(--df-border)] px-4 py-3 last:border-0 transition-colors hover:bg-[var(--df-secondary)]/50 cursor-pointer',
-                !n.read && 'bg-[var(--df-primary)]/5'
+                'flex gap-3 border-b border-[var(--df-border)] px-4 py-3 last:border-0 transition-colors hover:bg-[rgba(148,163,184,0.06)] cursor-pointer',
+                !n.read && 'bg-[var(--df-primary)]/5',
               )}
             >
               <span className={cn('mt-0.5 flex-shrink-0', cfg.color)}>{cfg.icon}</span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-2">
-                  <p className="text-xs font-semibold text-[var(--df-fg)]">{n.title}</p>
+                  <p className="text-xs font-semibold text-[var(--df-foreground)]">{n.title}</p>
                   {!n.read && (
                     <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[var(--df-primary)]" />
                   )}
                 </div>
-                <p className="mt-0.5 text-xs text-[var(--df-muted-fg)]">{n.body}</p>
-                <p className="mt-1 text-[10px] text-[var(--df-muted-fg)]/60">{n.time}</p>
+                <p className="mt-0.5 text-xs text-[var(--df-muted-foreground)]">{n.body}</p>
+                <p className="mt-1 text-[10px] text-[var(--df-muted-foreground)]">{n.time}</p>
               </div>
             </div>
           );
@@ -170,20 +171,20 @@ function ProfileMenu({ onClose }: { onClose: () => void }) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -4, scale: 0.97 }}
       transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-      className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-2xl border border-[var(--df-border)] bg-[var(--df-card)] shadow-[var(--shadow-float)]"
+      className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-2xl border border-[var(--df-border)] bg-[var(--df-card)] shadow-[var(--df-shadow-lg)]"
     >
       <div className="border-b border-[var(--df-border)] px-4 py-3">
-        <p className="text-sm font-semibold text-[var(--df-fg)]">John Doe</p>
-        <p className="text-xs text-[var(--df-muted-fg)]">john@devforge.io</p>
+        <p className="text-sm font-semibold text-[var(--df-foreground)]">John Doe</p>
+        <p className="text-xs text-[var(--df-muted-foreground)]">john@devforge.io</p>
       </div>
       {[
         { icon: <User className="h-4 w-4" />, label: 'Profile' },
         { icon: <Settings className="h-4 w-4" />, label: 'Settings' },
-      ].map((item) => (
+      ].map(item => (
         <button
           key={item.label}
           onClick={onClose}
-          className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-[var(--df-muted-fg)] transition-colors hover:bg-[var(--df-secondary)] hover:text-[var(--df-fg)]"
+          className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-[var(--df-muted-foreground)] transition-colors hover:bg-[rgba(148,163,184,0.06)] hover:text-[var(--df-foreground)]"
         >
           {item.icon}
           {item.label}
@@ -208,17 +209,17 @@ const WORKSPACES = [
 
 function WorkspaceSwitcher() {
   const [open, setOpen] = useState(false);
-  const active = WORKSPACES.find((w) => w.active)!;
+  const active = WORKSPACES.find(w => w.active)!;
 
   return (
     <div className="relative">
       <button
-        onClick={() => setOpen((p) => !p)}
-        className="flex h-7 items-center gap-1.5 rounded-lg border border-[var(--df-border)] bg-[var(--df-secondary)] px-2.5 text-xs font-medium text-[var(--df-fg)] transition-all hover:border-[var(--df-border-strong)] hover:bg-[var(--df-subtle)]"
+        onClick={() => setOpen(p => !p)}
+        className="flex h-9 items-center gap-2 rounded-xl border border-[var(--df-border)] bg-[var(--df-card)] px-3 text-xs font-medium text-[var(--df-foreground)] transition-all hover:border-[var(--df-border-strong)] hover:bg-[rgba(148,163,184,0.06)]"
       >
         <span className="h-2 w-2 rounded-full bg-[var(--df-success)]" />
         {active.name}
-        <ChevronsUpDown className="h-3 w-3 text-[var(--df-muted-fg)]" />
+        <ChevronsUpDown className="h-3.5 w-3.5 text-[var(--df-muted-foreground)]" />
       </button>
       <AnimatePresence>
         {open && (
@@ -227,31 +228,31 @@ function WorkspaceSwitcher() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.97 }}
             transition={{ duration: 0.15 }}
-            className="absolute left-0 top-full z-50 mt-1.5 w-52 overflow-hidden rounded-xl border border-[var(--df-border)] bg-[var(--df-card)] shadow-[var(--shadow-elevated)]"
+            className="absolute left-0 top-full z-50 mt-1.5 w-56 overflow-hidden rounded-2xl border border-[var(--df-border)] bg-[var(--df-card)] shadow-[var(--df-shadow-lg)]"
           >
-            {WORKSPACES.map((ws) => (
+            {WORKSPACES.map(ws => (
               <button
                 key={ws.name}
                 onClick={() => setOpen(false)}
-                className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-xs transition-colors hover:bg-[var(--df-secondary)]"
+                className="flex w-full items-center justify-between gap-2 px-3.5 py-2.5 text-xs transition-colors hover:bg-[rgba(148,163,184,0.06)]"
               >
                 <div className="flex items-center gap-2">
                   <span
                     className={cn(
                       'h-1.5 w-1.5 rounded-full',
-                      ws.active ? 'bg-[var(--df-success)]' : 'bg-[var(--df-border-strong)]'
+                      ws.active ? 'bg-[var(--df-success)]' : 'bg-[var(--df-border-strong)]',
                     )}
                   />
                   <span
                     className={cn(
                       'font-medium',
-                      ws.active ? 'text-[var(--df-fg)]' : 'text-[var(--df-muted-fg)]'
+                      ws.active ? 'text-[var(--df-foreground)]' : 'text-[var(--df-muted-foreground)]',
                     )}
                   >
                     {ws.name}
                   </span>
                 </div>
-                <span className="rounded-full border border-[var(--df-border)] px-1.5 py-0.5 text-[10px] text-[var(--df-muted-fg)]">
+                <span className="rounded-full border border-[var(--df-border)] px-1.5 py-0.5 text-[10px] text-[var(--df-muted-foreground)]">
                   {ws.plan}
                 </span>
               </button>
@@ -272,7 +273,7 @@ export function Header({ breadcrumb = [{ label: 'Dashboard' }] }: HeaderProps) {
   const { theme, setTheme } = useTheme();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const unreadCount = SAMPLE_NOTIFICATIONS.filter((n) => !n.read).length;
+  const unreadCount = SAMPLE_NOTIFICATIONS.filter(n => !n.read).length;
 
   const closeAll = () => {
     setShowNotifications(false);
@@ -280,62 +281,63 @@ export function Header({ breadcrumb = [{ label: 'Dashboard' }] }: HeaderProps) {
   };
 
   return (
-    <header className="glass-strong sticky top-0 z-40 flex h-14 w-full flex-shrink-0 items-center gap-3 border-b border-[var(--df-border)] px-4">
+    <header className="sticky top-0 z-40 flex h-16 w-full flex-shrink-0 items-center gap-3 border-b border-[var(--df-border)] bg-[var(--df-card)]/80 px-5 backdrop-blur-xl">
       {/* Left: Breadcrumb */}
       <div className="flex flex-1 items-center gap-3 min-w-0">
         <Breadcrumb items={breadcrumb} />
       </div>
 
       {/* Center: Search */}
-      <div className="hidden md:flex flex-1 max-w-xs">
+      <div className="hidden md:flex flex-1 max-w-sm">
         <button
-          className="flex w-full items-center gap-2 rounded-xl border border-[var(--df-border)] bg-[var(--df-input)] px-3 py-1.5 text-sm text-[var(--df-muted-fg)] transition-all hover:border-[var(--df-border-strong)] hover:bg-[var(--df-secondary)]"
+          className="flex w-full items-center gap-3 rounded-2xl border border-[var(--df-border)] bg-[var(--df-input)] px-4 py-2 text-sm text-[var(--df-muted-foreground)] transition-all hover:border-[var(--df-border-strong)] hover:bg-[var(--df-card)]"
           onClick={() => {}}
         >
-          <Search className="h-3.5 w-3.5 flex-shrink-0" />
-          <span className="flex-1 text-left text-xs">Search anything...</span>
-          <kbd className="flex items-center gap-0.5 rounded border border-[var(--df-border)] bg-[var(--df-secondary)] px-1.5 py-0.5 text-[10px] font-medium">
-            <Command className="h-2.5 w-2.5" />K
+          <Search className="h-4 w-4 flex-shrink-0 text-[var(--df-muted-foreground)]" />
+          <span className="flex-1 text-left text-sm">Search anything...</span>
+          <kbd className="flex items-center gap-0.5 rounded-lg border border-[var(--df-border)] bg-[var(--df-secondary)] px-2 py-1 text-[10px] font-medium">
+            <Command className="h-3 w-3" />K
           </kbd>
         </button>
       </div>
 
       {/* Right: Controls */}
-      <div className="flex flex-shrink-0 items-center gap-1.5">
+      <div className="flex flex-shrink-0 items-center gap-2">
         {/* Workspace switcher */}
         <div className="hidden sm:block">
           <WorkspaceSwitcher />
         </div>
 
-        <Separator orientation="vertical" className="mx-1 h-5" />
+        <Separator orientation="vertical" className="mx-2 h-6" />
 
         {/* Search (mobile) */}
-        <IconButton
-          icon={<Search className="h-4 w-4" />}
-          label="Search (⌘K)"
-          className="md:hidden"
-        />
+        <ForgeButton variant="ghost" size="sm" className="md:hidden">
+          <Search className="h-4 w-4" />
+        </ForgeButton>
 
         {/* Theme toggle */}
-        <IconButton
-          icon={theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          label={theme === 'dark' ? 'Light mode' : 'Dark mode'}
+        <ForgeButton
+          variant="ghost"
+          size="sm"
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-        />
+        >
+          {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        </ForgeButton>
 
         {/* Notifications */}
         <div className="relative">
-          <IconButton
-            icon={<Bell className="h-4 w-4" />}
-            label="Notifications"
-            active={showNotifications}
+          <ForgeButton
+            variant="ghost"
+            size="sm"
             onClick={() => {
-              setShowNotifications((p) => !p);
+              setShowNotifications(p => !p);
               setShowProfile(false);
             }}
-          />
+          >
+            <Bell className="h-4 w-4" />
+          </ForgeButton>
           {unreadCount > 0 && !showNotifications && (
-            <span className="pointer-events-none absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--df-primary)] text-[9px] font-bold text-white">
+            <span className="pointer-events-none absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--df-danger)] text-[9px] font-bold text-white">
               {unreadCount}
             </span>
           )}
@@ -348,15 +350,12 @@ export function Header({ breadcrumb = [{ label: 'Dashboard' }] }: HeaderProps) {
         <div className="relative ml-1">
           <button
             onClick={() => {
-              setShowProfile((p) => !p);
+              setShowProfile(p => !p);
               setShowNotifications(false);
             }}
-            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full ring-2 ring-transparent transition-all hover:ring-[var(--df-primary)]/40"
+            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-2xl ring-2 ring-transparent transition-all hover:ring-[var(--df-primary)]/30"
           >
-            <Avatar className="h-7 w-7">
-              <AvatarImage src="" />
-              <AvatarFallback className="text-[10px]">JD</AvatarFallback>
-            </Avatar>
+            <ForgeAvatar name="John Doe" size="sm" status="online" />
           </button>
           <AnimatePresence>{showProfile && <ProfileMenu onClose={closeAll} />}</AnimatePresence>
         </div>

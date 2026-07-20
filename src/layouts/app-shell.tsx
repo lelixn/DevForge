@@ -26,7 +26,7 @@ export function AppShell({ breadcrumb }: AppShellProps) {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="flex h-screen w-full overflow-hidden bg-[var(--df-bg)]">
+      <div className="flex h-screen w-full overflow-hidden bg-[var(--df-background)]">
         {/* Sidebar */}
         <Sidebar />
 
