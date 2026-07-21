@@ -1,11 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
 :root {
   /* ============================
-     DEVFORGE DESIGN TOKENS v2.0
+     DEVFORGE DESIGN TOKENS v3.0
      ============================ */
+
+  /* Layout */
+  --df-sidebar-width-expanded: 280px;
+  --df-sidebar-width-collapsed: 80px;
+  --df-header-height: 72px;
+  --df-content-max-width: 1600px;
+  --df-content-padding: 32px;
+  --df-grid-gap: 24px;
 
   /* Brand Colors */
   --df-primary: #6366f1;
@@ -18,8 +24,12 @@
   /* Neutral Colors */
   --df-background: #020617;
   --df-foreground: #f8fafc;
-  --df-muted: #020617;
+  --df-fg: #f8fafc;
+  --df-muted: #0f172a;
   --df-muted-foreground: #64748b;
+  --df-muted-fg: #64748b;
+  --df-secondary: rgba(148, 163, 184, 0.08);
+  --df-subtle: rgba(148, 163, 184, 0.12);
   --df-card: #0f172a;
   --df-card-foreground: #f1f5f9;
   --df-border: rgba(148, 163, 184, 0.15);
@@ -39,10 +49,14 @@
 
   /* Gradients */
   --df-gradient-primary: linear-gradient(135deg, #6366f1 0%, #0ea5e9 100%);
-  --df-gradient-subtle: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(14, 165, 233, 0.05) 100%);
-  --df-gradient-bg: radial-gradient(circle at top left, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
-                     radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.05) 0%, transparent 40%),
-                     #020617;
+  --df-gradient-subtle: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.1) 0%,
+    rgba(14, 165, 233, 0.05) 100%
+  );
+  --df-gradient-bg:
+    radial-gradient(circle at top left, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.05) 0%, transparent 40%), #020617;
 
   /* Shadows */
   --df-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.01);
@@ -50,6 +64,7 @@
   --df-shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.03);
   --df-shadow-elevated: 0 20px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.04);
   --df-shadow-glow: 0 0 40px rgba(99, 102, 241, 0.15);
+  --shadow-elevated: var(--df-shadow-elevated);
 
   /* Typography */
   --df-font-sans: 'Inter', 'Noto Sans', system-ui, -apple-system, sans-serif;
@@ -65,6 +80,18 @@
   --df-space-unit: 4px;
 }
 
+@media (max-width: 1024px) {
+  :root {
+    --df-content-padding: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --df-content-padding: 16px;
+  }
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -77,20 +104,200 @@ body {
   overflow-x: hidden;
 }
 
+/* Typography hierarchy */
+.text-display {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--df-foreground);
+}
+
+.text-h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--df-foreground);
+}
+
+.text-h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+  color: var(--df-foreground);
+}
+
+.text-h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  color: var(--df-foreground);
+}
+
+.text-body {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--df-foreground);
+}
+
+.text-caption {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--df-muted-foreground);
+}
+
+.text-muted {
+  color: var(--df-muted-foreground);
+}
+
+/* Layout container */
+.layout-container {
+  width: 100%;
+  max-width: var(--df-content-max-width);
+  margin-inline: auto;
+  padding-inline: var(--df-content-padding);
+}
+
+/* Premium Card System */
+.premium-card {
+  background: var(--df-card);
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-xl); /* 24px */
+  padding: 24px;
+  box-shadow: var(--df-shadow-sm);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-card:hover {
+  border-color: var(--df-border-strong);
+  box-shadow: var(--df-shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Lucide Icon stroke width override */
+.lucide,
+svg.lucide {
+  stroke-width: 2px !important;
+}
+
+.layout-grid {
+  display: grid;
+  gap: var(--df-grid-gap);
+}
+
+/* Dashboard grid presets */
+.dashboard-grid {
+  display: grid;
+  gap: var(--df-grid-gap);
+}
+
+.dashboard-grid-metrics {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 1024px) {
+  .dashboard-grid-metrics {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.dashboard-grid-main {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-grid-main {
+    grid-template-columns: 2fr 3fr;
+  }
+}
+
+.dashboard-grid-bottom {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-grid-bottom {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.dashboard-grid-thirds {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-grid-thirds {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Icon normalization */
+.icon-box {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--df-radius-lg);
+  border: 1px solid var(--df-border);
+  background: var(--df-secondary);
+  color: var(--df-muted-foreground);
+}
+
+.icon-box-sm {
+  width: 2rem;
+  height: 2rem;
+}
+
+.icon-box-md {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.icon-box-lg {
+  width: 3rem;
+  height: 3rem;
+}
+
+.icon-box svg {
+  width: 1rem;
+  height: 1rem;
+  stroke-width: 2;
+}
+
+.icon-box-sm svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.icon-box-lg svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--df-border-strong);
   border-radius: 10px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(148, 163, 184, 0.4);
   border: 2px solid transparent;
@@ -109,7 +316,18 @@ body {
   outline-offset: 3px;
 }
 
-/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+/* App shell offset */
+.app-main {
+  margin-left: var(--df-sidebar-offset, 280px);
+  transition: margin-left 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 1023px) {
+  .app-main {
+    margin-left: 0;
+  }
 }

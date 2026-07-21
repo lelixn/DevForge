@@ -36,7 +36,7 @@ const ForgeBadge = ({
         'inline-flex items-center gap-1 rounded-full font-medium transition-all',
         sizeStyles[size],
         variantStyles[variant],
-        className,
+        className
       )}
       {...props}
     >
@@ -48,7 +48,7 @@ const ForgeBadge = ({
             variant === 'success' && 'bg-[var(--df-success)]',
             variant === 'warning' && 'bg-[var(--df-warning)]',
             variant === 'danger' && 'bg-[var(--df-danger)]',
-            (variant === 'default' || variant === 'secondary') && 'bg-[var(--df-muted-foreground)]',
+            (variant === 'default' || variant === 'secondary') && 'bg-[var(--df-muted-foreground)]'
           )}
         />
       )}

@@ -10,7 +10,14 @@ interface ForgeAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const ForgeAvatar = ({ className, src, name, size = 'md', status, ...props }: ForgeAvatarProps) => {
-  const initials = name ? name.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase() : '';
+  const initials = name
+    ? name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase()
+    : '';
 
   const sizeStyles: Record<ForgeAvatarSize, string> = {
     sm: 'h-8 w-8 text-xs',
@@ -24,7 +31,7 @@ const ForgeAvatar = ({ className, src, name, size = 'md', status, ...props }: Fo
       <div
         className={cn(
           'flex items-center justify-center rounded-full bg-[var(--df-gradient-primary)] font-semibold text-white shadow-sm transition-all',
-          sizeStyles[size],
+          sizeStyles[size]
         )}
       >
         {src ? (
@@ -42,7 +49,7 @@ const ForgeAvatar = ({ className, src, name, size = 'md', status, ...props }: Fo
         <span
           className={cn(
             'absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-[var(--df-card)]',
-            status === 'online' ? 'bg-[var(--df-success)]' : 'bg-[var(--df-muted-foreground)]',
+            status === 'online' ? 'bg-[var(--df-success)]' : 'bg-[var(--df-muted-foreground)]'
           )}
         />
       )}

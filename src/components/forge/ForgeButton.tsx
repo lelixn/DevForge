@@ -15,7 +15,21 @@ interface ForgeButtonProps extends HTMLMotionProps<'button'> {
 }
 
 const ForgeButton = forwardRef<HTMLButtonElement, ForgeButtonProps>(
-  ({ children, className, variant = 'primary', size = 'md', isLoading, leftIcon, rightIcon, glow, disabled, ...props }, ref) => {
+  (
+    {
+      children,
+      className,
+      variant = 'primary',
+      size = 'md',
+      isLoading,
+      leftIcon,
+      rightIcon,
+      glow,
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
     const baseStyles =
       'inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none';
 
@@ -43,7 +57,13 @@ const ForgeButton = forwardRef<HTMLButtonElement, ForgeButtonProps>(
         ref={ref}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        className={cn(baseStyles, sizeStyles[size], variantStyles[variant], glow && 'shadow-[var(--df-shadow-glow)]', className)}
+        className={cn(
+          baseStyles,
+          sizeStyles[size],
+          variantStyles[variant],
+          glow && 'shadow-[var(--df-shadow-glow)]',
+          className
+        )}
         disabled={disabled || isLoading}
         {...props}
       >
@@ -58,7 +78,7 @@ const ForgeButton = forwardRef<HTMLButtonElement, ForgeButtonProps>(
         )}
       </motion.button>
     );
-  },
+  }
 );
 
 ForgeButton.displayName = 'ForgeButton';

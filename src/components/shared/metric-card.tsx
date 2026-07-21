@@ -33,9 +33,15 @@ export function MetricCard({
   className,
 }: MetricCardProps) {
   return (
-    <div
+    <motion.div
+      whileHover={{
+        y: -4,
+        boxShadow: 'var(--df-shadow-lg)',
+        borderColor: 'var(--df-border-strong)',
+      }}
+      transition={{ duration: 0.2, ease: 'easeOut' }}
       className={cn(
-        'rounded-2xl border border-[var(--df-border)] bg-[var(--df-card)] p-4 transition-all duration-200 hover:border-[var(--df-border-strong)]',
+        'rounded-[24px] border border-[var(--df-border)] bg-[var(--df-card)] p-6 shadow-sm transition-all duration-200',
         className
       )}
     >
@@ -59,6 +65,6 @@ export function MetricCard({
           <p className="text-xs text-[var(--df-muted-fg)]">{progress}% of target</p>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

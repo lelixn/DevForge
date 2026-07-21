@@ -15,13 +15,15 @@ export function PageContainer({ children, className, animate = true }: PageConta
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -4 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        className={cn('flex flex-col gap-6 p-6', className)}
+        className={cn('layout-container flex flex-col gap-6 py-8', className)}
       >
         {children}
       </motion.div>
     );
   }
-  return <div className={cn('flex flex-col gap-6 p-6', className)}>{children}</div>;
+  return (
+    <div className={cn('layout-container flex flex-col gap-6 py-8', className)}>{children}</div>
+  );
 }
 
 interface PageHeaderProps {

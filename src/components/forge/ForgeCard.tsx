@@ -16,18 +16,22 @@ const ForgeCard = forwardRef<HTMLDivElement, ForgeCardProps>(
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
-        whileHover={hoverable ? { y: -4, boxShadow: 'var(--df-shadow-lg)' } : {}}
+        whileHover={
+          hoverable
+            ? { y: -4, boxShadow: 'var(--df-shadow-lg)', borderColor: 'var(--df-border-strong)' }
+            : {}
+        }
         className={cn(
-          'rounded-xl border border-[var(--df-border)] bg-[var(--df-card)] p-5 shadow-sm transition-all',
+          'rounded-[24px] border border-[var(--df-border)] bg-[var(--df-card)] p-6 shadow-sm transition-all',
           glow && 'shadow-[var(--df-shadow-glow)]',
           gradientBorder && 'relative',
-          className,
+          className
         )}
         {...props}
       >
         {gradientBorder && (
           <div
-            className="pointer-events-none absolute inset-0 rounded-xl bg-[var(--df-gradient-primary)] opacity-20"
+            className="pointer-events-none absolute inset-0 rounded-[24px] bg-[var(--df-gradient-primary)] opacity-20"
             style={{
               padding: '1px',
               WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
@@ -39,7 +43,7 @@ const ForgeCard = forwardRef<HTMLDivElement, ForgeCardProps>(
         {props.children as React.ReactNode}
       </motion.div>
     );
-  },
+  }
 );
 
 ForgeCard.displayName = 'ForgeCard';

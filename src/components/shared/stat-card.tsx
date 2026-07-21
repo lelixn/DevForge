@@ -28,10 +28,14 @@ export function StatCard({
 
   return (
     <motion.div
-      whileHover={{ y: -2 }}
-      transition={{ duration: 0.18, ease: 'easeOut' }}
+      whileHover={{
+        y: -4,
+        boxShadow: 'var(--df-shadow-lg)',
+        borderColor: 'var(--df-border-strong)',
+      }}
+      transition={{ duration: 0.2, ease: 'easeOut' }}
       className={cn(
-        'relative overflow-hidden rounded-2xl border border-[var(--df-border)] bg-[var(--df-card)] p-5 transition-all duration-200 hover:border-[var(--df-border-strong)]',
+        'relative overflow-hidden rounded-[24px] border border-[var(--df-border)] bg-[var(--df-card)] p-6 shadow-sm transition-all duration-200',
         accent &&
           'border-[var(--df-primary)]/20 bg-gradient-to-br from-[var(--df-primary)]/5 to-[var(--df-card)]',
         className
@@ -39,7 +43,7 @@ export function StatCard({
     >
       {/* Background glow for accent cards */}
       {accent && (
-        <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-[var(--df-primary)]/10 blur-2xl" />
+        <div className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-[var(--df-primary)]/10 blur-2xl" />
       )}
 
       <div className="relative flex items-start justify-between gap-3">

@@ -15,9 +15,11 @@ import {
   AlertCircle,
   Clock,
   X,
+  Menu,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useTheme } from '@/hooks/use-theme';
+import { useSidebarStore } from '@/stores/sidebar';
 import { Separator } from '@/components/ui/separator';
 import { ForgeAvatar } from '@/components/forge/ForgeAvatar';
 import { ForgeBadge } from '@/components/forge/ForgeBadge';
@@ -46,7 +48,7 @@ function Breadcrumb({ items }: BreadcrumbProps) {
                 'font-medium',
                 isLast
                   ? 'text-[var(--df-foreground)]'
-                  : 'text-[var(--df-muted-foreground)] hover:text-[var(--df-foreground)] transition-colors cursor-pointer',
+                  : 'text-[var(--df-muted-foreground)] hover:text-[var(--df-foreground)] transition-colors cursor-pointer'
               )}
             >
               {item.label}
@@ -102,7 +104,7 @@ const typeConfig = {
 };
 
 function NotificationPanel({ onClose }: { onClose: () => void }) {
-  const unread = SAMPLE_NOTIFICATIONS.filter(n => !n.read).length;
+  const unread = SAMPLE_NOTIFICATIONS.filter((n) => !n.read).length;
 
   return (
     <motion.div
@@ -129,14 +131,14 @@ function NotificationPanel({ onClose }: { onClose: () => void }) {
         </button>
       </div>
       <div className="max-h-72 overflow-y-auto">
-        {SAMPLE_NOTIFICATIONS.map(n => {
+        {SAMPLE_NOTIFICATIONS.map((n) => {
           const cfg = typeConfig[n.type as keyof typeof typeConfig];
           return (
             <div
               key={n.id}
               className={cn(
                 'flex gap-3 border-b border-[var(--df-border)] px-4 py-3 last:border-0 transition-colors hover:bg-[rgba(148,163,184,0.06)] cursor-pointer',
-                !n.read && 'bg-[var(--df-primary)]/5',
+                !n.read && 'bg-[var(--df-primary)]/5'
               )}
             >
               <span className={cn('mt-0.5 flex-shrink-0', cfg.color)}>{cfg.icon}</span>
@@ -180,7 +182,7 @@ function ProfileMenu({ onClose }: { onClose: () => void }) {
       {[
         { icon: <User className="h-4 w-4" />, label: 'Profile' },
         { icon: <Settings className="h-4 w-4" />, label: 'Settings' },
-      ].map(item => (
+      ].map((item) => (
         <button
           key={item.label}
           onClick={onClose}
@@ -209,12 +211,12 @@ const WORKSPACES = [
 
 function WorkspaceSwitcher() {
   const [open, setOpen] = useState(false);
-  const active = WORKSPACES.find(w => w.active)!;
+  const active = WORKSPACES.find((w) => w.active)!;
 
   return (
     <div className="relative">
       <button
-        onClick={() => setOpen(p => !p)}
+        onClick={() => setOpen((p) => !p)}
         className="flex h-9 items-center gap-2 rounded-xl border border-[var(--df-border)] bg-[var(--df-card)] px-3 text-xs font-medium text-[var(--df-foreground)] transition-all hover:border-[var(--df-border-strong)] hover:bg-[rgba(148,163,184,0.06)]"
       >
         <span className="h-2 w-2 rounded-full bg-[var(--df-success)]" />
@@ -230,7 +232,7 @@ function WorkspaceSwitcher() {
             transition={{ duration: 0.15 }}
             className="absolute left-0 top-full z-50 mt-1.5 w-56 overflow-hidden rounded-2xl border border-[var(--df-border)] bg-[var(--df-card)] shadow-[var(--df-shadow-lg)]"
           >
-            {WORKSPACES.map(ws => (
+            {WORKSPACES.map((ws) => (
               <button
                 key={ws.name}
                 onClick={() => setOpen(false)}
@@ -240,13 +242,15 @@ function WorkspaceSwitcher() {
                   <span
                     className={cn(
                       'h-1.5 w-1.5 rounded-full',
-                      ws.active ? 'bg-[var(--df-success)]' : 'bg-[var(--df-border-strong)]',
+                      ws.active ? 'bg-[var(--df-success)]' : 'bg-[var(--df-border-strong)]'
                     )}
                   />
                   <span
                     className={cn(
                       'font-medium',
-                      ws.active ? 'text-[var(--df-foreground)]' : 'text-[var(--df-muted-foreground)]',
+                      ws.active
+                        ? 'text-[var(--df-foreground)]'
+                        : 'text-[var(--df-muted-foreground)]'
                     )}
                   >
                     {ws.name}
@@ -267,13 +271,15 @@ function WorkspaceSwitcher() {
 // ---- Main Header ----
 interface HeaderProps {
   breadcrumb?: BreadcrumbItem[];
+  onOpenCommand?: () => void;
 }
 
-export function Header({ breadcrumb = [{ label: 'Dashboard' }] }: HeaderProps) {
+export function Header({ breadcrumb = [{ label: 'Dashboard' }], onOpenCommand }: HeaderProps) {
   const { theme, setTheme } = useTheme();
+  const { setMobileOpen } = useSidebarStore();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const unreadCount = SAMPLE_NOTIFICATIONS.filter(n => !n.read).length;
+  const unreadCount = SAMPLE_NOTIFICATIONS.filter((n) => !n.read).length;
 
   const closeAll = () => {
     setShowNotifications(false);
@@ -281,9 +287,17 @@ export function Header({ breadcrumb = [{ label: 'Dashboard' }] }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-40 flex h-16 w-full flex-shrink-0 items-center gap-3 border-b border-[var(--df-border)] bg-[var(--df-card)]/80 px-5 backdrop-blur-xl">
-      {/* Left: Breadcrumb */}
+    <header className="sticky top-0 z-40 flex h-[72px] w-full flex-shrink-0 items-center gap-3 border-b border-[var(--df-border)] bg-[var(--df-card)]/80 px-5 backdrop-blur-xl">
+      {/* Left: Hamburger & Breadcrumb */}
       <div className="flex flex-1 items-center gap-3 min-w-0">
+        <button
+          type="button"
+          onClick={() => setMobileOpen(true)}
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--df-border)] bg-[var(--df-card)] text-[var(--df-muted-foreground)] hover:text-[var(--df-foreground)] lg:hidden hover:bg-[rgba(148,163,184,0.06)] transition-all flex-shrink-0"
+          aria-label="Open menu"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
         <Breadcrumb items={breadcrumb} />
       </div>
 
@@ -291,7 +305,7 @@ export function Header({ breadcrumb = [{ label: 'Dashboard' }] }: HeaderProps) {
       <div className="hidden md:flex flex-1 max-w-sm">
         <button
           className="flex w-full items-center gap-3 rounded-2xl border border-[var(--df-border)] bg-[var(--df-input)] px-4 py-2 text-sm text-[var(--df-muted-foreground)] transition-all hover:border-[var(--df-border-strong)] hover:bg-[var(--df-card)]"
-          onClick={() => {}}
+          onClick={onOpenCommand}
         >
           <Search className="h-4 w-4 flex-shrink-0 text-[var(--df-muted-foreground)]" />
           <span className="flex-1 text-left text-sm">Search anything...</span>
@@ -330,7 +344,7 @@ export function Header({ breadcrumb = [{ label: 'Dashboard' }] }: HeaderProps) {
             variant="ghost"
             size="sm"
             onClick={() => {
-              setShowNotifications(p => !p);
+              setShowNotifications((p) => !p);
               setShowProfile(false);
             }}
           >
@@ -350,7 +364,7 @@ export function Header({ breadcrumb = [{ label: 'Dashboard' }] }: HeaderProps) {
         <div className="relative ml-1">
           <button
             onClick={() => {
-              setShowProfile(p => !p);
+              setShowProfile((p) => !p);
               setShowNotifications(false);
             }}
             className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-2xl ring-2 ring-transparent transition-all hover:ring-[var(--df-primary)]/30"
