@@ -1,4 +1,4 @@
-import { createRootRouteWithContext } from '@tanstack/react-router';
+import { createRootRouteWithContext, Outlet, useLocation } from '@tanstack/react-router';
 import type { QueryClient } from '@tanstack/react-query';
 import { NotFound } from '@/components/not-found';
 import { ErrorBoundary } from '@/components/error-boundary';
@@ -17,10 +17,29 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   pendingComponent: LoadingFallback,
 });
 
+// Routes that manage their own standalone layout (Landing, Auth, Onboarding, Errors)
+const STANDALONE_ROUTES = [
+  '/landing',
+  '/login',
+  '/register',
+  '/forgot-password',
+  '/reset-password',
+  '/verify-email',
+  '/onboarding/create-workspace',
+  '/onboarding/invite-members',
+  '/unauthorized',
+  '/session-expired',
+];
+
 function RootComponent() {
+  const location = useLocation();
+  const isStandalone = STANDALONE_ROUTES.some(
+    (path) => location.pathname === path || location.pathname.startsWith(path + '/')
+  );
+
   return (
     <>
-      <AppShell />
+      {isStandalone ? <Outlet /> : <AppShell />}
       <Toaster position="bottom-right" closeButton />
     </>
   );

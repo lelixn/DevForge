@@ -2,7 +2,8 @@
 
 :root {
   /* ============================
-     DEVFORGE DESIGN TOKENS v3.0
+     FORGE DESIGN SYSTEM v4.0
+     Theme: Neo Industrial Futurism
      ============================ */
 
   /* Layout */
@@ -13,31 +14,36 @@
   --df-content-padding: 32px;
   --df-grid-gap: 24px;
 
-  /* Brand Colors */
-  --df-primary: #6366f1;
+  /* Brand Colors - Neo Industrial */
+  --df-background: #07070a;
+  --df-surface: #101014;
+  --df-surface-elevated: #15151c;
+  --df-primary: #7c3aed;
   --df-primary-foreground: #ffffff;
-  --df-primary-light: #818cf8;
-  --df-primary-dark: #4f46e5;
-  --df-accent: #0ea5e9;
-  --df-accent-foreground: #ffffff;
+  --df-primary-light: #a78bfa;
+  --df-primary-dark: #6d28d9;
+  --df-secondary: #4f46e5;
+  --df-secondary-foreground: #ffffff;
+  --df-accent: #06b6d4;
+  --df-accent-foreground: #000000;
 
   /* Neutral Colors */
-  --df-background: #020617;
-  --df-foreground: #f8fafc;
-  --df-fg: #f8fafc;
-  --df-muted: #0f172a;
-  --df-muted-foreground: #64748b;
-  --df-muted-fg: #64748b;
-  --df-secondary: rgba(148, 163, 184, 0.08);
-  --df-subtle: rgba(148, 163, 184, 0.12);
-  --df-card: #0f172a;
-  --df-card-foreground: #f1f5f9;
-  --df-border: rgba(148, 163, 184, 0.15);
+  --df-foreground: #ffffff;
+  --df-fg: #ffffff;
+  --df-muted: #101014;
+  --df-muted-foreground: #a1a1aa;
+  --df-muted-fg: #a1a1aa;
+  --df-subtle: rgba(255, 255, 255, 0.04);
+  --df-card: #101014;
+  --df-card-foreground: #ffffff;
+  --df-border: rgba(255, 255, 255, 0.06);
   --df-border-focus: var(--df-primary);
-  --df-border-strong: rgba(148, 163, 184, 0.3);
-  --df-input: #020617;
+  --df-border-strong: rgba(255, 255, 255, 0.15);
+  --df-input: #101014;
   --df-ring: var(--df-primary);
-  --df-sidebar: #000000;
+  --df-sidebar: #07070a;
+  --df-glow: rgba(124, 58, 237, 0.2);
+  --df-accent-glow: rgba(6, 182, 212, 0.15);
 
   /* Semantic Colors */
   --df-success: #10b981;
@@ -48,31 +54,32 @@
   --df-danger-foreground: #450a0a;
 
   /* Gradients */
-  --df-gradient-primary: linear-gradient(135deg, #6366f1 0%, #0ea5e9 100%);
+  --df-gradient-primary: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+  --df-gradient-accent: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
   --df-gradient-subtle: linear-gradient(
     135deg,
-    rgba(99, 102, 241, 0.1) 0%,
-    rgba(14, 165, 233, 0.05) 100%
+    rgba(124, 58, 237, 0.12) 0%,
+    rgba(6, 182, 212, 0.06) 100%
   );
   --df-gradient-bg:
-    radial-gradient(circle at top left, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.05) 0%, transparent 40%), #020617;
+    radial-gradient(circle at 15% 0%, rgba(124, 58, 237, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 85% 100%, rgba(6, 182, 212, 0.05) 0%, transparent 40%), #07070a;
 
   /* Shadows */
-  --df-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.01);
-  --df-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.02);
-  --df-shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.03);
-  --df-shadow-elevated: 0 20px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.04);
-  --df-shadow-glow: 0 0 40px rgba(99, 102, 241, 0.15);
+  --df-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --df-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --df-shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --df-shadow-elevated: 0 20px 80px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  --df-shadow-glow: 0 0 40px rgba(124, 58, 237, 0.25);
   --shadow-elevated: var(--df-shadow-elevated);
 
   /* Typography */
-  --df-font-sans: 'Inter', 'Noto Sans', system-ui, -apple-system, sans-serif;
-  --df-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --df-font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --df-font-mono: 'IBM Plex Mono', 'JetBrains Mono', monospace;
 
   /* Radius */
-  --df-radius-sm: 6px;
-  --df-radius: 10px;
+  --df-radius-sm: 8px;
+  --df-radius: 12px;
   --df-radius-lg: 16px;
   --df-radius-xl: 24px;
 
@@ -330,4 +337,49 @@ html {
   .app-main {
     margin-left: 0;
   }
+}
+
+/* IBM Plex Mono Utility for Technical Data */
+.font-mono,
+code,
+kbd,
+samp,
+.tech-data {
+  font-family: var(--df-font-mono) !important;
+  letter-spacing: -0.01em;
+}
+
+/* Technical Blueprint Grid Pattern */
+.bg-blueprint-grid {
+  background-size: 32px 32px;
+  background-image:
+    linear-gradient(to right, rgba(6, 182, 212, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(6, 182, 212, 0.06) 1px, transparent 1px);
+}
+
+.bg-dot-grid {
+  background-size: 24px 24px;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+}
+
+/* Aurora Ambient Gradient Glow */
+.aurora-bg {
+  position: relative;
+}
+
+.aurora-bg::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: -10%;
+  width: 120%;
+  height: 140%;
+  background: radial-gradient(
+    circle at 50% 20%,
+    rgba(124, 58, 237, 0.12) 0%,
+    rgba(6, 182, 212, 0.06) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
 }

@@ -5,6 +5,7 @@ import { Sidebar } from './sidebar';
 import { Header } from './header';
 import { CommandPalette } from './command-palette';
 import { useSidebarStore, SIDEBAR_WIDTH_COLLAPSED, SIDEBAR_WIDTH_EXPANDED } from '@/stores/sidebar';
+import { RequireAuth } from '@/shared/guards/require-auth';
 
 interface AppShellProps {
   breadcrumb?: { label: string; href?: string }[];
@@ -32,29 +33,31 @@ export function AppShell({ breadcrumb }: AppShellProps) {
   }, [sidebarWidth]);
 
   return (
-    <TooltipProvider delayDuration={300}>
-      <div className="relative min-h-screen w-full overflow-x-hidden bg-[var(--df-background)]">
-        {mobileOpen && (
-          <button
-            type="button"
-            aria-label="Close navigation"
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-            onClick={() => setMobileOpen(false)}
-          />
-        )}
+    <RequireAuth>
+      <TooltipProvider delayDuration={300}>
+        <div className="relative min-h-screen w-full overflow-x-hidden bg-[var(--df-background)]">
+          {mobileOpen && (
+            <button
+              type="button"
+              aria-label="Close navigation"
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+              onClick={() => setMobileOpen(false)}
+            />
+          )}
 
-        <Sidebar />
+          <Sidebar />
 
-        <div className="app-main flex min-h-screen min-w-0 flex-col">
-          <Header breadcrumb={breadcrumb} onOpenCommand={() => setCommandOpen(true)} />
+          <div className="app-main flex min-h-screen min-w-0 flex-col">
+            <Header breadcrumb={breadcrumb} onOpenCommand={() => setCommandOpen(true)} />
 
-          <main className="flex-1 overflow-y-auto overflow-x-hidden">
-            <Outlet />
-          </main>
+            <main className="flex-1 overflow-y-auto overflow-x-hidden">
+              <Outlet />
+            </main>
+          </div>
+
+          <CommandPalette open={commandOpen} onClose={() => setCommandOpen(false)} />
         </div>
-
-        <CommandPalette open={commandOpen} onClose={() => setCommandOpen(false)} />
-      </div>
-    </TooltipProvider>
+      </TooltipProvider>
+    </RequireAuth>
   );
 }
