@@ -15,14 +15,13 @@ import {
   ChevronsRight,
   ChevronDown,
   Zap,
-  ChevronsUpDown,
   Check,
+  Cpu,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useSidebarStore, SIDEBAR_WIDTH_COLLAPSED, SIDEBAR_WIDTH_EXPANDED } from '@/stores/sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { ForgeAvatar } from '@/components/forge/ForgeAvatar';
+import { ForgeTooltip } from '@/components/forge/ForgeTooltip';
 import { ForgeBadge } from '@/components/forge/ForgeBadge';
 
 interface NavItem {
@@ -30,40 +29,52 @@ interface NavItem {
   icon: React.ReactNode;
   to: string;
   badge?: string | number;
-  children?: NavItem[];
+  badgeVariant?: 'primary' | 'cyan' | 'success';
 }
 
 const WORKSPACES = [
-  { name: 'Engineering', plan: 'Pro', active: true },
-  { name: 'Design System', plan: 'Free', active: false },
-  { name: 'Infrastructure', plan: 'Enterprise', active: false },
+  { name: 'Engineering Core', plan: 'Enterprise', active: true },
+  { name: 'Design System', plan: 'Pro', active: false },
+  { name: 'Infra Cluster A', plan: 'Internal', active: false },
 ];
 
 const NAV_SECTIONS: { title: string; items: NavItem[] }[] = [
   {
-    title: 'Workspace',
-    items: [{ label: 'Dashboard', icon: <LayoutDashboard />, to: '/' }],
+    title: 'OVERVIEW',
+    items: [{ label: 'Dashboard', icon: <LayoutDashboard className="h-4 w-4" />, to: '/' }],
   },
   {
-    title: 'Build',
+    title: 'ENGINEERING',
     items: [
-      { label: 'Projects', icon: <FolderKanban />, to: '/projects', badge: 3 },
-      { label: 'Teams', icon: <Users />, to: '/teams' },
-      { label: 'Tasks', icon: <CheckSquare />, to: '/tasks', badge: 12 },
+      {
+        label: 'Projects',
+        icon: <FolderKanban className="h-4 w-4" />,
+        to: '/projects',
+        badge: 14,
+        badgeVariant: 'primary',
+      },
+      { label: 'Teams', icon: <Users className="h-4 w-4" />, to: '/teams' },
+      { label: 'Tasks', icon: <CheckSquare className="h-4 w-4" />, to: '/tasks', badge: 247 },
     ],
   },
   {
-    title: 'Platform',
+    title: 'INTELLIGENCE & API',
     items: [
-      { label: 'AI Workspace', icon: <Sparkles />, to: '/ai', badge: 'New' },
-      { label: 'API Workspace', icon: <Code2 />, to: '/api-workspace' },
-      { label: 'Documentation', icon: <BookOpen />, to: '/documentation' },
-      { label: 'Analytics', icon: <BarChart3 />, to: '/analytics' },
+      {
+        label: 'AI Workspace',
+        icon: <Sparkles className="h-4 w-4" />,
+        to: '/ai',
+        badge: 'AI',
+        badgeVariant: 'cyan',
+      },
+      { label: 'API Workspace', icon: <Code2 className="h-4 w-4" />, to: '/api-workspace' },
+      { label: 'Documentation', icon: <BookOpen className="h-4 w-4" />, to: '/documentation' },
+      { label: 'Analytics', icon: <BarChart3 className="h-4 w-4" />, to: '/analytics' },
     ],
   },
   {
-    title: 'System',
-    items: [{ label: 'Settings', icon: <Settings />, to: '/settings' }],
+    title: 'SYSTEM',
+    items: [{ label: 'Settings', icon: <Settings className="h-4 w-4" />, to: '/settings' }],
   },
 ];
 
@@ -73,79 +84,69 @@ function WorkspaceSwitcher({ collapsed }: { collapsed: boolean }) {
 
   if (collapsed) {
     return (
-      <div className="px-3 pt-4 pb-2 flex justify-center flex-shrink-0">
-        <Tooltip delayDuration={0}>
-          <TooltipTrigger asChild>
-            <button
-              type="button"
-              className="icon-box icon-box-md mx-auto border-[var(--df-border)] bg-[var(--df-secondary)] hover:border-[var(--df-border-strong)] hover:bg-[var(--df-subtle)] transition-all cursor-pointer"
-            >
-              <Zap className="h-4 w-4 text-[var(--df-primary)]" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="right">{active.name}</TooltipContent>
-        </Tooltip>
+      <div className="px-3 pt-4 pb-2 flex justify-center shrink-0">
+        <ForgeTooltip content={`Workspace: ${active.name}`} side="right">
+          <button
+            type="button"
+            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgba(124,58,237,0.4)] bg-[rgba(124,58,237,0.15)] shadow-[0_0_20px_rgba(124,58,237,0.25)] hover:scale-105 transition-all cursor-pointer"
+          >
+            <Zap className="h-5 w-5 text-[var(--df-accent)]" />
+          </button>
+        </ForgeTooltip>
       </div>
     );
   }
 
   return (
-    <div className="relative px-3 pt-4">
+    <div className="relative px-4 pt-4">
       <button
         type="button"
         onClick={() => setOpen((p) => !p)}
-        className="flex w-full items-center gap-3 rounded-[var(--df-radius-xl)] border border-[var(--df-border)] bg-[var(--df-secondary)] px-3 py-2.5 text-left transition-all hover:border-[var(--df-border-strong)] hover:bg-[var(--df-subtle)]"
+        className="flex w-full items-center justify-between rounded-2xl border border-[var(--df-border)] bg-[var(--df-surface)] p-3 text-left transition-all hover:border-[var(--df-border-strong)] hover:bg-[var(--df-surface-elevated)] group cursor-pointer"
       >
-        <span className="icon-box icon-box-sm border-[var(--df-primary)]/20 bg-[var(--df-primary)]/10">
-          <Zap className="h-3.5 w-3.5 text-[var(--df-primary)]" />
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold text-[var(--df-foreground)]">
-            {active.name}
-          </p>
-          <p className="truncate text-caption text-[var(--df-muted-foreground)]">
-            {active.plan} plan
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[rgba(124,58,237,0.15)] border border-[rgba(124,58,237,0.3)] text-[var(--df-accent)] shadow-[0_0_15px_rgba(124,58,237,0.2)]">
+            <Zap className="h-4 w-4" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-white tracking-tight leading-none">
+                {active.name}
+              </span>
+              <ForgeBadge variant="cyan" size="sm" mono className="text-[9px] py-0 px-1.5 h-4">
+                {active.plan}
+              </ForgeBadge>
+            </div>
+            <span className="text-[10px] font-mono text-[var(--df-muted-foreground)]">
+              DEVFORGE // SYS_01
+            </span>
+          </div>
         </div>
-        <ChevronsUpDown className="h-4 w-4 flex-shrink-0 text-[var(--df-muted-foreground)]" />
+        <ChevronDown className="h-4 w-4 text-[var(--df-muted-foreground)] group-hover:text-white transition-transform" />
       </button>
 
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -4, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -4, scale: 0.98 }}
-            transition={{ duration: 0.15 }}
-            className="absolute left-3 right-3 top-full z-50 mt-2 overflow-hidden rounded-[var(--df-radius-xl)] border border-[var(--df-border)] bg-[var(--df-card)] shadow-[var(--df-shadow-lg)]"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="absolute left-4 right-4 top-full z-50 mt-2 rounded-2xl border border-[var(--df-border-strong)] bg-[#101014] p-1.5 shadow-[var(--df-shadow-elevated)] backdrop-blur-md"
           >
-            {WORKSPACES.map((ws) => (
+            {WORKSPACES.map((w) => (
               <button
-                key={ws.name}
+                key={w.name}
                 type="button"
                 onClick={() => setOpen(false)}
-                className="flex w-full items-center justify-between gap-2 px-3.5 py-2.5 text-sm transition-colors hover:bg-[var(--df-secondary)]"
+                className={cn(
+                  'flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs font-medium transition-colors cursor-pointer',
+                  w.active
+                    ? 'bg-[rgba(124,58,237,0.15)] text-white'
+                    : 'text-[var(--df-muted-foreground)] hover:bg-[rgba(255,255,255,0.05)] hover:text-white'
+                )}
               >
-                <div className="flex items-center gap-2.5">
-                  {ws.active ? (
-                    <Check className="h-4 w-4 text-[var(--df-primary)]" />
-                  ) : (
-                    <span className="h-4 w-4" />
-                  )}
-                  <span
-                    className={cn(
-                      'font-medium',
-                      ws.active
-                        ? 'text-[var(--df-foreground)]'
-                        : 'text-[var(--df-muted-foreground)]'
-                    )}
-                  >
-                    {ws.name}
-                  </span>
-                </div>
-                <span className="rounded-full border border-[var(--df-border)] px-2 py-0.5 text-caption">
-                  {ws.plan}
-                </span>
+                <span>{w.name}</span>
+                {w.active && <Check className="h-3.5 w-3.5 text-[var(--df-accent)]" />}
               </button>
             ))}
           </motion.div>
@@ -155,222 +156,146 @@ function WorkspaceSwitcher({ collapsed }: { collapsed: boolean }) {
   );
 }
 
-interface NavItemRowProps {
-  item: NavItem;
-  collapsed: boolean;
-  depth?: number;
-}
+export function Sidebar() {
+  const { collapsed, mobileOpen, toggle, setMobileOpen } = useSidebarStore();
+  const currentPath = useRouterState({ select: (s) => s.location.pathname });
 
-function NavItemRow({ item, collapsed, depth = 0 }: NavItemRowProps) {
-  const router = useRouterState();
-  const currentPath = router.location.pathname;
-  const isActive = currentPath === item.to || (item.to !== '/' && currentPath.startsWith(item.to));
-  const hasChildren = item.children && item.children.length > 0;
-  const [expanded, setExpanded] = useState(isActive);
+  return (
+    <>
+      {/* Mobile Overlay */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm lg:hidden"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
 
-  const rowContent = (
-    <motion.div
-      whileHover={{ x: collapsed ? 0 : 4 }}
-      transition={{ duration: 0.2, ease: 'easeOut' }}
-      className="group relative w-full"
-    >
-      <div
-        className={cn(
-          'relative flex w-full items-center gap-3 rounded-[var(--df-radius-xl)] px-3.5 py-2.5 text-sm transition-all duration-200 select-none cursor-pointer',
-          depth > 0 && 'ml-3 text-xs',
-          collapsed ? 'justify-center px-2' : 'justify-between',
-          isActive
-            ? 'font-semibold text-[var(--df-primary)]'
-            : 'text-[var(--df-muted-foreground)] hover:bg-[var(--df-secondary)]/50 hover:text-[var(--df-foreground)]'
-        )}
-        onClick={() => {
-          if (hasChildren) setExpanded((p) => !p);
+      <aside
+        style={{
+          width: collapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH_EXPANDED,
         }}
-      >
-        {isActive && (
-          <motion.span
-            layoutId="sidebar-active-indicator"
-            className={cn(
-              'absolute rounded-[var(--df-radius-xl)] bg-[var(--df-primary)]/10 border-l-2 border-[var(--df-primary)] z-0 pointer-events-none',
-              collapsed ? 'inset-1 rounded-xl border-l-0 bg-[var(--df-primary)]/20' : 'inset-0'
-            )}
-            transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-          />
+        className={cn(
+          'fixed bottom-0 top-0 left-0 z-40 flex flex-col border-r border-[var(--df-border)] bg-[#07070A] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] select-none',
+          mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
-
-        <div className={cn('relative z-10 flex items-center', collapsed ? 'gap-0' : 'gap-3')}>
-          <span
-            className={cn(
-              'icon-box icon-box-sm border-transparent bg-transparent [&_svg]:h-4 [&_svg]:w-4',
-              isActive
-                ? 'text-[var(--df-primary)]'
-                : 'text-[var(--df-muted-foreground)] group-hover:text-[var(--df-foreground)]'
+      >
+        {/* Brand Header */}
+        <div className="flex h-[72px] items-center justify-between px-4 border-b border-[var(--df-border)] shrink-0">
+          <Link to="/" className="flex items-center gap-3 overflow-hidden">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--df-gradient-primary)] text-white shadow-[0_0_20px_rgba(124,58,237,0.4)] shrink-0">
+              <Cpu className="h-5 w-5" />
+            </div>
+            {!collapsed && (
+              <div className="flex flex-col">
+                <span className="text-base font-extrabold text-white tracking-wide font-sans">
+                  DEV<span className="text-[var(--df-accent)]">FORGE</span>
+                </span>
+                <span className="text-[9px] font-mono text-[var(--df-muted-foreground)] tracking-widest uppercase">
+                  ENGINEERING OS
+                </span>
+              </div>
             )}
-          >
-            {item.icon}
-          </span>
-          {!collapsed && <span className="truncate">{item.label}</span>}
+          </Link>
+
+          {!collapsed && (
+            <button
+              onClick={toggle}
+              className="flex h-7 w-7 items-center justify-center rounded-lg text-[var(--df-muted-foreground)] hover:bg-[rgba(255,255,255,0.06)] hover:text-white transition-colors cursor-pointer"
+            >
+              <ChevronsLeft className="h-4 w-4" />
+            </button>
+          )}
         </div>
 
-        {!collapsed && (
-          <div className="relative z-10 flex items-center gap-2">
-            {item.badge !== undefined &&
-              (typeof item.badge === 'string' ? (
-                <ForgeBadge variant="primary" size="sm">
-                  {item.badge}
-                </ForgeBadge>
-              ) : (
-                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[var(--df-subtle)] px-1.5 text-caption font-semibold">
-                  {item.badge}
-                </span>
-              ))}
-            {hasChildren && (
-              <ChevronDown
-                className={cn(
-                  'h-4 w-4 transition-transform duration-200',
-                  expanded && 'rotate-180'
-                )}
-              />
-            )}
-          </div>
-        )}
-      </div>
-    </motion.div>
-  );
+        {/* Workspace Switcher */}
+        <WorkspaceSwitcher collapsed={collapsed} />
 
-  return (
-    <div>
-      {hasChildren || item.to === '#' ? (
-        rowContent
-      ) : (
-        <Link
-          to={item.to}
-          className="block"
-          onClick={() => useSidebarStore.getState().setMobileOpen(false)}
-        >
-          {rowContent}
-        </Link>
-      )}
-
-      {hasChildren && !collapsed && (
-        <AnimatePresence initial={false}>
-          {expanded && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="overflow-hidden"
-            >
-              {item.children!.map((child) => (
-                <NavItemRow key={child.to} item={child} collapsed={false} depth={1} />
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      )}
-    </div>
-  );
-}
-
-export function Sidebar() {
-  const { collapsed, toggle, mobileOpen } = useSidebarStore();
-  const width = collapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH_EXPANDED;
-
-  return (
-    <motion.aside
-      animate={{ width }}
-      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-      className={cn(
-        'fixed left-0 top-0 z-50 flex h-screen flex-shrink-0 flex-col overflow-hidden border-r border-[var(--df-border)] bg-[var(--df-sidebar)]',
-        'max-lg:shadow-[var(--df-shadow-lg)]',
-        mobileOpen ? 'max-lg:translate-x-0' : 'max-lg:-translate-x-full'
-      )}
-    >
-      <WorkspaceSwitcher collapsed={collapsed} />
-
-      <ScrollArea className="flex-1 py-2">
-        <nav className="flex flex-col gap-0.5 px-2">
-          {NAV_SECTIONS.map((section) => (
-            <div key={section.title} className="mb-2">
-              <AnimatePresence>
+        {/* Navigation Sections */}
+        <ScrollArea className="flex-1 px-3 py-4">
+          <div className="space-y-6">
+            {NAV_SECTIONS.map((section) => (
+              <div key={section.title} className="space-y-1">
                 {!collapsed && (
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="mb-1.5 px-3 py-1 text-caption font-semibold uppercase tracking-widest text-[var(--df-muted-foreground)]"
-                  >
+                  <h4 className="px-3 text-[10px] font-mono font-semibold tracking-wider text-[var(--df-muted-foreground)] uppercase mb-2">
                     {section.title}
-                  </motion.p>
+                  </h4>
                 )}
-              </AnimatePresence>
 
-              <div className="rounded-[var(--df-radius-xl)] bg-[var(--df-secondary)]/40 p-1">
-                {section.items.map((item) =>
-                  collapsed ? (
-                    <Tooltip key={item.label} delayDuration={0}>
-                      <TooltipTrigger asChild>
-                        <div>
-                          <NavItemRow item={item} collapsed={collapsed} />
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent side="right" className="flex items-center gap-2">
-                        {item.label}
-                        {item.badge !== undefined && (
-                          <ForgeBadge variant="primary" size="sm">
-                            {String(item.badge)}
-                          </ForgeBadge>
+                {section.items.map((item) => {
+                  const isActive =
+                    item.to === '/' ? currentPath === '/' : currentPath.startsWith(item.to);
+
+                  const content = (
+                    <Link
+                      key={item.to}
+                      to={item.to as any}
+                      onClick={() => setMobileOpen(false)}
+                      className={cn(
+                        'relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium transition-all duration-200 cursor-pointer group',
+                        collapsed && 'justify-center px-0 py-3',
+                        isActive
+                          ? 'text-white bg-[rgba(124,58,237,0.15)] border border-[rgba(124,58,237,0.3)] shadow-[0_0_20px_rgba(124,58,237,0.15)] font-semibold'
+                          : 'text-[var(--df-muted-foreground)] hover:bg-[rgba(255,255,255,0.05)] hover:text-white'
+                      )}
+                    >
+                      {/* Active Indicator Glow Bar */}
+                      {isActive && (
+                        <motion.div
+                          layoutId="sidebar-active-indicator"
+                          className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-[var(--df-accent)] shadow-[0_0_10px_#06B6D4]"
+                        />
+                      )}
+
+                      <span
+                        className={cn(
+                          'transition-colors',
+                          isActive
+                            ? 'text-[var(--df-accent)]'
+                            : 'group-hover:text-[var(--df-primary-light)]'
                         )}
-                      </TooltipContent>
-                    </Tooltip>
-                  ) : (
-                    <NavItemRow key={item.label} item={item} collapsed={collapsed} />
-                  )
-                )}
-              </div>
-            </div>
-          ))}
-        </nav>
-      </ScrollArea>
+                      >
+                        {item.icon}
+                      </span>
 
-      <div className="flex-shrink-0 border-t border-[var(--df-border)] p-3">
-        {!collapsed ? (
-          <div className="mb-2 flex items-center gap-3 rounded-[var(--df-radius-xl)] border border-[var(--df-border)] bg-[var(--df-secondary)] px-3 py-2.5 transition-colors hover:border-[var(--df-border-strong)]">
-            <ForgeAvatar name="John Doe" size="sm" status="online" />
-            <div className="min-w-0 flex-1">
-              <span className="block truncate text-sm font-medium text-[var(--df-foreground)]">
-                John Doe
-              </span>
-              <span className="block truncate text-caption text-[var(--df-muted-foreground)]">
-                john@devforge.io
-              </span>
-            </div>
+                      {!collapsed && <span className="flex-1 truncate">{item.label}</span>}
+
+                      {!collapsed && item.badge !== undefined && (
+                        <ForgeBadge variant={item.badgeVariant || 'default'} size="sm" mono>
+                          {item.badge}
+                        </ForgeBadge>
+                      )}
+                    </Link>
+                  );
+
+                  if (collapsed) {
+                    return (
+                      <ForgeTooltip key={item.to} content={item.label} side="right">
+                        {content}
+                      </ForgeTooltip>
+                    );
+                  }
+
+                  return content;
+                })}
+              </div>
+            ))}
           </div>
-        ) : (
-          <div className="mb-2 flex justify-center py-1">
-            <ForgeAvatar name="John Doe" size="md" status="online" />
+        </ScrollArea>
+
+        {/* Collapsed Expand Toggle Footer */}
+        {collapsed && (
+          <div className="p-3 border-t border-[var(--df-border)] flex justify-center">
+            <button
+              onClick={toggle}
+              className="flex h-9 w-9 items-center justify-center rounded-xl text-[var(--df-muted-foreground)] hover:bg-[rgba(255,255,255,0.06)] hover:text-white transition-colors cursor-pointer"
+            >
+              <ChevronsRight className="h-4 w-4" />
+            </button>
           </div>
         )}
-
-        <button
-          type="button"
-          onClick={toggle}
-          className={cn(
-            'flex w-full items-center gap-2 rounded-[var(--df-radius-xl)] px-3 py-2.5 text-sm text-[var(--df-muted-foreground)] transition-all hover:bg-[var(--df-secondary)] hover:text-[var(--df-foreground)]',
-            collapsed ? 'justify-center' : ''
-          )}
-        >
-          {collapsed ? (
-            <ChevronsRight className="h-4 w-4" />
-          ) : (
-            <>
-              <ChevronsLeft className="h-4 w-4" />
-              <span>Collapse</span>
-            </>
-          )}
-        </button>
-      </div>
-    </motion.aside>
+      </aside>
+    </>
   );
 }
+
+export const ForgeSidebar = Sidebar;

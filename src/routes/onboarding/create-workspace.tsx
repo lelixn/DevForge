@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Building2, Globe2, Users, Layers, ArrowRight, Upload, Sparkles } from 'lucide-react';
+import { Building2, Globe2, Users, Layers, ArrowRight, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { OnboardingLayout } from '@/layouts/onboarding-layout';

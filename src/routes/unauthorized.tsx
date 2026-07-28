@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { ShieldAlert, ArrowLeft, Terminal } from 'lucide-react';
+import { ShieldAlert, ArrowLeft } from 'lucide-react';
 import { ForgeButton } from '@/components/forge/ForgeButton';
 import { useAuthStore } from '@/stores/auth';
 

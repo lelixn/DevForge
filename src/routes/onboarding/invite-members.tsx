@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Plus, Trash2, Mail, Shield, CheckCircle2, ArrowRight, UserPlus, Info } from 'lucide-react';
+import { Plus, Trash2, Mail, Shield, ArrowRight, UserPlus } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { OnboardingLayout } from '@/layouts/onboarding-layout';

@@ -1,5 +1,4 @@
-import { motion } from 'framer-motion';
-import { Bot, Sparkles, Terminal, Code2, Cpu, CheckCircle2 } from 'lucide-react';
+import { Bot, Cpu, CheckCircle2 } from 'lucide-react';
 
 export function AIFeatures() {
   return (

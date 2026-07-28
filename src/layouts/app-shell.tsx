@@ -7,11 +7,7 @@ import { CommandPalette } from './command-palette';
 import { useSidebarStore, SIDEBAR_WIDTH_COLLAPSED, SIDEBAR_WIDTH_EXPANDED } from '@/stores/sidebar';
 import { RequireAuth } from '@/shared/guards/require-auth';
 
-interface AppShellProps {
-  breadcrumb?: { label: string; href?: string }[];
-}
-
-export function AppShell({ breadcrumb }: AppShellProps) {
+export function AppShell() {
   const [commandOpen, setCommandOpen] = useState(false);
   const { collapsed, mobileOpen, setMobileOpen } = useSidebarStore();
 
@@ -48,7 +44,7 @@ export function AppShell({ breadcrumb }: AppShellProps) {
           <Sidebar />
 
           <div className="app-main flex min-h-screen min-w-0 flex-col">
-            <Header breadcrumb={breadcrumb} onOpenCommand={() => setCommandOpen(true)} />
+            <Header />
 
             <main className="flex-1 overflow-y-auto overflow-x-hidden">
               <Outlet />

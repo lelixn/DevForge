@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from '@tanstack/react-router';
-import { Check, Sparkles, Zap, ShieldCheck } from 'lucide-react';
+import { Check, Sparkles } from 'lucide-react';
 import { ForgeButton } from '@/components/forge/ForgeButton';
 
 const PLANS = [

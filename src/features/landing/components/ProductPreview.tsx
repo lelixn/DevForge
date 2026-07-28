@@ -1,16 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import {
-  LayoutDashboard,
-  Kanban,
-  Code2,
-  Bot,
-  CheckCircle2,
-  GitBranch,
-  Terminal,
-  Activity,
-  Layers,
-} from 'lucide-react';
+import { LayoutDashboard, Kanban, Code2, Bot, GitBranch, Activity } from 'lucide-react';
 
 const TABS = [
   { id: 'dashboard', label: 'Executive Dashboard', icon: LayoutDashboard },
