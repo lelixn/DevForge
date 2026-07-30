@@ -1,156 +1,114 @@
-import { Response } from 'express';
-import jwt from 'jsonwebtoken';
-import User from '../models/User';
-import { AuthenticatedRequest } from '../middleware/auth';
+import { Request, Response, NextFunction } from 'express';
+import { AuthService } from '../services/authService';
+import { ApiResponse } from '../utils/apiResponse';
+import { AuthenticatedRequest } from '../middlewares/authMiddleware';
+import { User } from '../models/User';
 
-const generateToken = (userId: string): string => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET || 'fallback_secret', {
-    expiresIn: '30d',
-  });
-};
+export class AuthController {
+  static async register(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { name, email, password } = req.body;
+      const result = await AuthService.register(name, email, password);
 
-export const register = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-  try {
-    const { name, email, password } = req.body;
-    if (!name || !email || !password) {
-      res.status(400).json({ message: 'All fields are required' });
-      return;
-    }
-
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      res.status(400).json({ message: 'User already exists with this email' });
-      return;
-    }
-
-    const user = new User({ name, email, password });
-    await user.save();
-
-    const token = generateToken(user._id.toString());
-    res.status(201).json({
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        settings: user.settings,
-      },
-    });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Internal server error' });
-  }
-};
-
-export const login = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-  try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      res.status(400).json({ message: 'Email and password are required' });
-      return;
-    }
-
-    const user = await User.findOne({ email });
-    if (!user) {
-      res.status(401).json({ message: 'Invalid credentials' });
-      return;
-    }
-
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      res.status(401).json({ message: 'Invalid credentials' });
-      return;
-    }
-
-    const token = generateToken(user._id.toString());
-    res.status(200).json({
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        settings: user.settings,
-      },
-    });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Internal server error' });
-  }
-};
-
-export const getProfile = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-  try {
-    const user = await User.findById(req.userId);
-    if (!user) {
-      res.status(404).json({ message: 'User not found' });
-      return;
-    }
-
-    res.status(200).json({
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      settings: user.settings,
-    });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Internal server error' });
-  }
-};
-
-export const updateSettings = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-  try {
-    const user = await User.findById(req.userId);
-    if (!user) {
-      res.status(404).json({ message: 'User not found' });
-      return;
-    }
-
-    // Merge settings
-    user.settings = { ...user.settings, ...req.body };
-    await user.save();
-
-    res.status(200).json({
-      settings: user.settings,
-    });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Internal server error' });
-  }
-};
-
-export const googleAuth = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-  try {
-    const { token: googleToken, profile } = req.body;
-    // For simplicity, in production we would verify the Google Token via OAuth client.
-    // If validated, get or create the user.
-    if (!profile || !profile.email) {
-      res.status(400).json({ message: 'Invalid Google profile info' });
-      return;
-    }
-
-    let user = await User.findOne({ email: profile.email });
-    if (!user) {
-      user = new User({
-        name: profile.name || 'Google User',
-        email: profile.email,
-        googleId: profile.sub,
-        avatar: profile.picture,
+      res.cookie('refreshToken', result.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
-      await user.save();
-    } else if (!user.googleId) {
-      user.googleId = profile.sub;
-      user.avatar = profile.picture;
-      await user.save();
-    }
 
-    const token = generateToken(user._id.toString());
-    res.status(200).json({
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        settings: user.settings,
-      },
-    });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Google Auth Failed' });
+      return ApiResponse.created(res, result, 'User registered successfully');
+    } catch (error) {
+      next(error);
+    }
   }
-};
+
+  static async login(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, password } = req.body;
+      const result = await AuthService.login(email, password);
+
+      res.cookie('refreshToken', result.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      return ApiResponse.success(res, 200, result, 'Login successful');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async refreshToken(req: Request, res: Response, next: NextFunction) {
+    try {
+      const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
+      if (!refreshToken) {
+        return ApiResponse.error(res, 401, 'Refresh token required');
+      }
+
+      const result = await AuthService.refreshToken(refreshToken);
+
+      res.cookie('refreshToken', result.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      return ApiResponse.success(res, 200, result, 'Token refreshed successfully');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async logout(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    try {
+      const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
+      if (req.user) {
+        await AuthService.logout(req.user.userId, refreshToken);
+      }
+
+      res.clearCookie('refreshToken');
+      return ApiResponse.success(res, 200, null, 'Logged out successfully');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async me(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    try {
+      if (!req.user) {
+        return ApiResponse.error(res, 401, 'Unauthorized');
+      }
+      const user = await User.findById(req.user.userId).select('-password -refreshTokens');
+      if (!user) {
+        return ApiResponse.error(res, 44, 'User not found');
+      }
+      return ApiResponse.success(res, 200, user);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async forgotPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email } = req.body;
+      const result = await AuthService.requestPasswordReset(email);
+      return ApiResponse.success(res, 200, result, result.message);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async resetPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { token, newPassword } = req.body;
+      const result = await AuthService.resetPassword(token, newPassword);
+      return ApiResponse.success(res, 200, result, result.message);
+    } catch (error) {
+      next(error);
+    }
+  }
+}

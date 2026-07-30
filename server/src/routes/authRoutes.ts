@@ -1,13 +1,22 @@
 import { Router } from 'express';
-import { register, login, getProfile, updateSettings, googleAuth } from '../controllers/authController';
-import { authenticate } from '../middleware/auth';
+import { AuthController } from '../controllers/authController';
+import { validateRequest } from '../middlewares/validateMiddleware';
+import { authenticateJWT } from '../middlewares/authMiddleware';
+import {
+  registerSchema,
+  loginSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+} from '../validators/authValidator';
 
 const router = Router();
 
-router.post('/register', register);
-router.post('/login', login);
-router.get('/profile', authenticate, getProfile);
-router.patch('/settings', authenticate, updateSettings);
-router.post('/google', googleAuth);
+router.post('/register', validateRequest(registerSchema), AuthController.register);
+router.post('/login', validateRequest(loginSchema), AuthController.login);
+router.post('/refresh', AuthController.refreshToken);
+router.post('/logout', authenticateJWT, AuthController.logout);
+router.get('/me', authenticateJWT, AuthController.me);
+router.post('/forgot-password', validateRequest(forgotPasswordSchema), AuthController.forgotPassword);
+router.post('/reset-password', validateRequest(resetPasswordSchema), AuthController.resetPassword);
 
 export default router;
