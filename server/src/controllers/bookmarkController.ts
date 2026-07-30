@@ -1,92 +1,100 @@
 import { Response } from 'express';
-import Bookmark from '../models/Bookmark';
-import { AuthenticatedRequest } from '../middleware/auth';
+import { Bookmark } from '../models/Bookmark';
+import { AuthenticatedRequest } from '../middlewares/authMiddleware';
+import { ApiResponse } from '../utils/apiResponse';
 
 export const getBookmarks = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    const bookmarks = await Bookmark.find({ user: req.userId }).sort({ order: 1 });
-    res.status(200).json(bookmarks);
+    const userId = req.user?.userId;
+    const bookmarks = await Bookmark.find({ userId }).sort({ order: 1 });
+    ApiResponse.success(res, 200, bookmarks);
   } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Failed to fetch bookmarks' });
+    ApiResponse.error(res, 500, error.message || 'Failed to fetch bookmarks');
   }
 };
 
 export const createBookmark = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    const { title, url, favicon, order } = req.body;
+    const userId = req.user?.userId;
+    const { title, url, favicon, order, category } = req.body;
     if (!title || !url) {
-      res.status(400).json({ message: 'Title and URL are required' });
+      ApiResponse.error(res, 400, 'Title and URL are required');
       return;
     }
 
     const bookmark = new Bookmark({
-      user: req.userId,
+      userId,
       title,
       url,
       favicon,
+      category: category || 'General',
       order: order ?? 0,
     });
 
     await bookmark.save();
-    res.status(201).json(bookmark);
+    ApiResponse.created(res, bookmark);
   } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Failed to create bookmark' });
+    ApiResponse.error(res, 500, error.message || 'Failed to create bookmark');
   }
 };
 
 export const deleteBookmark = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
+    const userId = req.user?.userId;
     const { id } = req.params;
-    const bookmark = await Bookmark.findOneAndDelete({ _id: id, user: req.userId });
+    const bookmark = await Bookmark.findOneAndDelete({ _id: id, userId });
 
     if (!bookmark) {
-      res.status(404).json({ message: 'Bookmark not found' });
+      ApiResponse.error(res, 404, 'Bookmark not found');
       return;
     }
 
-    res.status(200).json({ message: 'Bookmark deleted successfully', id });
+    ApiResponse.success(res, 200, { id }, 'Bookmark deleted successfully');
   } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Failed to delete bookmark' });
+    ApiResponse.error(res, 500, error.message || 'Failed to delete bookmark');
   }
 };
 
 export const reorderBookmarks = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    const { orders } = req.body; // Array of { id, order }
+    const userId = req.user?.userId;
+    const { orders } = req.body;
     if (!orders || !Array.isArray(orders)) {
-      res.status(400).json({ message: 'Orders array is required' });
+      ApiResponse.error(res, 400, 'Orders array is required');
       return;
     }
 
     const bulkOps = orders.map((item: { id: string; order: number }) => ({
       updateOne: {
-        filter: { _id: item.id, user: req.userId },
+        filter: { _id: item.id, userId },
         update: { $set: { order: item.order } },
       },
     }));
 
     await Bookmark.bulkWrite(bulkOps);
-    res.status(200).json({ message: 'Bookmarks reordered successfully' });
+    ApiResponse.success(res, 200, null, 'Bookmarks reordered successfully');
   } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Failed to reorder bookmarks' });
+    ApiResponse.error(res, 500, error.message || 'Failed to reorder bookmarks');
   }
 };
+
 export const updateBookmark = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
+    const userId = req.user?.userId;
     const { id } = req.params;
     const bookmark = await Bookmark.findOneAndUpdate(
-      { _id: id, user: req.userId },
+      { _id: id, userId },
       { $set: req.body },
       { new: true }
     );
 
     if (!bookmark) {
-      res.status(404).json({ message: 'Bookmark not found' });
+      ApiResponse.error(res, 404, 'Bookmark not found');
       return;
     }
 
-    res.status(200).json(bookmark);
+    ApiResponse.success(res, 200, bookmark);
   } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Failed to update bookmark' });
+    ApiResponse.error(res, 500, error.message || 'Failed to update bookmark');
   }
 };

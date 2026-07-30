@@ -1,20 +1,17 @@
 import { Router } from 'express';
-import { getTodos, createTodo, updateTodo, deleteTodo, reorderTodos, clearCompletedTodos } from '../controllers/todoController';
-import { authenticate } from '../middleware/auth';
+import { TodoController } from '../controllers/todoController';
+import { authenticateJWT } from '../middlewares/authMiddleware';
+import { validateRequest } from '../middlewares/validateMiddleware';
+import { createTodoSchema, updateTodoSchema } from '../validators/todoValidator';
 
 const router = Router();
 
-router.use(authenticate);
+router.use(authenticateJWT);
 
-router.route('/')
-  .get(getTodos)
-  .post(createTodo);
-
-router.post('/reorder', reorderTodos);
-router.post('/clear-completed', clearCompletedTodos);
-
-router.route('/:id')
-  .put(updateTodo)
-  .delete(deleteTodo);
+router.get('/', TodoController.getTodos as any);
+router.post('/', validateRequest(createTodoSchema), TodoController.createTodo as any);
+router.put('/:id', validateRequest(updateTodoSchema), TodoController.updateTodo as any);
+router.delete('/:id', TodoController.deleteTodo as any);
+router.post('/sync', TodoController.syncTodos as any);
 
 export default router;

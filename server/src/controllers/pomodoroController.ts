@@ -1,60 +1,69 @@
 import { Response } from 'express';
-import Pomodoro from '../models/Pomodoro';
-import { AuthenticatedRequest } from '../middleware/auth';
+import { PomodoroSession } from '../models/PomodoroSession';
+import { AuthenticatedRequest } from '../middlewares/authMiddleware';
+import { ApiResponse } from '../utils/apiResponse';
+import mongoose from 'mongoose';
 
 export const logSession = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    const { mode, durationMinutes } = req.body;
-    if (!mode || !durationMinutes) {
-      res.status(400).json({ message: 'Mode and duration are required' });
+    const userId = req.user?.userId;
+    const { mode, duration, taskTitle, ambientSound, focusScore } = req.body;
+    if (!mode || !duration) {
+      ApiResponse.error(res, 400, 'Mode and duration are required');
       return;
     }
 
-    const session = new Pomodoro({
-      user: req.userId,
+    const session = new PomodoroSession({
+      userId,
       mode,
-      durationMinutes,
+      duration,
+      taskTitle,
+      ambientSound: ambientSound || 'none',
+      focusScore: focusScore || 100,
     });
 
     await session.save();
-    res.status(201).json(session);
+    ApiResponse.created(res, session);
   } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Failed to log focus session' });
+    ApiResponse.error(res, 500, error.message || 'Failed to log focus session');
   }
 };
 
 export const getStats = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    const userId = req.userId;
+    const userId = req.user?.userId;
+    if (!userId) {
+      ApiResponse.error(res, 401, 'Unauthorized');
+      return;
+    }
 
-    // Aggregate sessions
-    const totalSessions = await Pomodoro.countDocuments({ user: userId, mode: 'focus' });
+    const userObjectId = new mongoose.Types.ObjectId(userId);
 
-    const totalDuration = await Pomodoro.aggregate([
-      { $match: { user: userId, mode: 'focus' } },
-      { $group: { _id: null, total: { $sum: '$durationMinutes' } } },
+    const totalSessions = await PomodoroSession.countDocuments({ userId: userObjectId, mode: 'focus' });
+
+    const totalDurationResult = await PomodoroSession.aggregate([
+      { $match: { userId: userObjectId, mode: 'focus' } },
+      { $group: { _id: null, total: { $sum: '$duration' } } },
     ]);
 
-    const totalMinutes = totalDuration.length > 0 ? totalDuration[0].total : 0;
+    const totalSeconds = totalDurationResult.length > 0 ? totalDurationResult[0].total : 0;
 
-    // Get today's sessions count
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
 
-    const todaySessions = await Pomodoro.countDocuments({
-      user: userId,
+    const todaySessions = await PomodoroSession.countDocuments({
+      userId: userObjectId,
       mode: 'focus',
       completedAt: { $gte: startOfToday },
     });
 
-    // Daily breakdown for the last 7 days
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-    const dailyBreakdown = await Pomodoro.aggregate([
+    const dailyBreakdown = await PomodoroSession.aggregate([
       {
         $match: {
-          user: userId,
+          userId: userObjectId,
           mode: 'focus',
           completedAt: { $gte: sevenDaysAgo },
         },
@@ -63,19 +72,19 @@ export const getStats = async (req: AuthenticatedRequest, res: Response): Promis
         $group: {
           _id: { $dateToString: { format: '%Y-%m-%d', date: '$completedAt' } },
           count: { $sum: 1 },
-          minutes: { $sum: '$durationMinutes' },
+          seconds: { $sum: '$duration' },
         },
       },
       { $sort: { _id: 1 } },
     ]);
 
-    res.status(200).json({
+    ApiResponse.success(res, 200, {
       totalFocusSessions: totalSessions,
-      totalFocusHours: Math.round((totalMinutes / 60) * 10) / 10,
+      totalFocusTime: totalSeconds,
       todaySessions,
       dailyBreakdown,
     });
   } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Failed to aggregate focus stats' });
+    ApiResponse.error(res, 500, error.message || 'Failed to aggregate focus stats');
   }
 };

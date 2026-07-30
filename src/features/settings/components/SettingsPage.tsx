@@ -298,6 +298,55 @@ export const SettingsPage: React.FC = () => {
         />
       </SettingSection>
 
+      {/* Backup & Sync */}
+      <SettingSection title="BACKUP & DATA" icon={<Cloud size={16} />}>
+        <div style={{ display: 'flex', gap: 12 }}>
+          <button
+            onClick={() => {
+              const exportData = {
+                settings: useSettingsStore.getState().settings,
+                timestamp: new Date().toISOString(),
+              };
+              const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `nova-os-backup-${new Date().toISOString().slice(0, 10)}.json`;
+              a.click();
+            }}
+            className="nova-btn nova-btn-primary nova-btn-sm"
+          >
+            Export Backup JSON
+          </button>
+
+          <label className="nova-btn nova-btn-ghost nova-btn-sm" style={{ cursor: 'pointer' }}>
+            Import Backup JSON
+            <input
+              type="file"
+              accept=".json"
+              style={{ display: 'none' }}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                  try {
+                    const parsed = JSON.parse(event.target?.result as string);
+                    if (parsed.settings) {
+                      useSettingsStore.getState().updateSettings(parsed.settings);
+                      alert('Settings successfully imported!');
+                    }
+                  } catch {
+                    alert('Invalid backup file format');
+                  }
+                };
+                reader.readAsText(file);
+              }}
+            />
+          </label>
+        </div>
+      </SettingSection>
+
       {/* About */}
       <div className="nova-card" style={{ padding: '20px', textAlign: 'center' }}>
         <div className="font-pixel" style={{ fontSize: '1.1rem', color: 'var(--nova-purple)', marginBottom: 6 }}>

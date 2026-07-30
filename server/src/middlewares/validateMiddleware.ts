@@ -7,10 +7,11 @@ export const validateRequest = (schema: ZodSchema) => {
     try {
       req.body = await schema.parseAsync(req.body);
       next();
-    } catch (error) {
-      if (error instanceof ZodError) {
-        const formattedErrors = error.errors.map((err) => ({
-          field: err.path.join('.'),
+    } catch (error: any) {
+      if (error instanceof ZodError || error?.issues) {
+        const issues = error.issues || error.errors || [];
+        const formattedErrors = issues.map((err: any) => ({
+          field: Array.isArray(err.path) ? err.path.join('.') : String(err.path),
           message: err.message,
         }));
         return next(ApiError.badRequest('Validation failed', formattedErrors));

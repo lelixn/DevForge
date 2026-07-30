@@ -1,13 +1,18 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Sparkles, User as UserIcon } from 'lucide-react';
 import { NovaBackground } from '@shared/components/NovaBackground';
 import { Sidebar } from '@shared/components/Sidebar';
 import { Header } from '@shared/components/Header';
 import { ToastContainer } from '@shared/components/ToastContainer';
 import { Footer } from '@shared/components/Footer';
 import { UniversalSearch } from '@features/search/components/UniversalSearch';
-import { useUIStore, useSettingsStore } from '@store/index';
+import { AIAssistantPanel } from '@features/ai/components/AIAssistantPanel';
+import { AuthModal } from '@features/auth/components/AuthModal';
+import { ErrorBoundary } from '@shared/components/ErrorBoundary';
+import { SyncManager } from '@shared/services/syncManager';
+import { useUIStore, useSettingsStore, useAuthStore } from '@store/index';
 import type { NavView } from '@shared/types';
 
 // Lazy load feature pages
@@ -76,12 +81,14 @@ const ViewRouter: React.FC<{ view: NavView }> = ({ view }) => {
     case 'dashboard':
       return <DashboardPage />;
     case 'search':
-      return <div style={{ padding: '40px 0' }}>
-        <h2 className="font-pixel" style={{ fontSize: '1.2rem', color: 'var(--nova-blue)', marginBottom: 12 }}>UNIVERSAL SEARCH</h2>
-        <p style={{ color: 'var(--text-muted)', fontFamily: 'JetBrains Mono', fontSize: '0.8rem' }}>
-          Press <kbd style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glow)', borderRadius: 4, padding: '2px 8px', color: 'var(--nova-purple)' }}>Ctrl+K</kbd> to open the search panel anywhere.
-        </p>
-      </div>;
+      return (
+        <div style={{ padding: '40px 0' }}>
+          <h2 className="font-pixel" style={{ fontSize: '1.2rem', color: 'var(--nova-blue)', marginBottom: 12 }}>UNIVERSAL SEARCH</h2>
+          <p style={{ color: 'var(--text-muted)', fontFamily: 'JetBrains Mono', fontSize: '0.8rem' }}>
+            Press <kbd style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glow)', borderRadius: 4, padding: '2px 8px', color: 'var(--nova-purple)' }}>Ctrl+K</kbd> to open the search panel anywhere.
+          </p>
+        </div>
+      );
     case 'tasks':
       return <TodoPage />;
     case 'pomodoro':
@@ -109,57 +116,113 @@ const ViewRouter: React.FC<{ view: NavView }> = ({ view }) => {
 const App: React.FC = () => {
   const { activeView, focusMode } = useUIStore();
   const { settings } = useSettingsStore();
+  const { isAuthenticated } = useAuthStore();
+
+  const [aiOpen, setAiOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+
+  useEffect(() => {
+    SyncManager.init();
+  }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* Background */}
-      {settings.showBackground && (
-        <NovaBackground showParticles={settings.showParticles} />
-      )}
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        {/* Background */}
+        {settings.showBackground && (
+          <NovaBackground showParticles={settings.showParticles} />
+        )}
 
-      {/* Universal Search Overlay */}
-      <UniversalSearch />
+        {/* Universal Search Overlay */}
+        <UniversalSearch />
 
-      {/* Toast Notifications */}
-      <ToastContainer />
+        {/* AI Assistant Panel */}
+        <AIAssistantPanel isOpen={aiOpen} onClose={() => setAiOpen(false)} />
 
-      {/* Main Layout */}
-      <div
-        className="nova-layout"
-        style={{ position: 'relative', zIndex: 1 }}
-      >
-        {/* Sidebar */}
-        <AnimatePresence>
-          {!focusMode && <Sidebar />}
-        </AnimatePresence>
+        {/* Auth Modal */}
+        <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
 
-        {/* Main Area */}
-        <main className="nova-main">
-          {/* Header */}
-          {!focusMode && <Header />}
+        {/* Toast Notifications */}
+        <ToastContainer />
 
-          {/* Content */}
-          <div className="nova-content nova-scroll">
-            <Suspense fallback={<PageLoader />}>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeView}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-                >
-                  <ViewRouter view={activeView} />
-                </motion.div>
-              </AnimatePresence>
-            </Suspense>
+        {/* Floating AI & Auth Triggers */}
+        {!focusMode && (
+          <div style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 90, display: 'flex', gap: 10 }}>
+            {!isAuthenticated && (
+              <motion.button
+                onClick={() => setAuthModalOpen(true)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="nova-btn nova-btn-ghost"
+                style={{ borderRadius: 30, padding: '8px 16px', background: 'var(--bg-glass)', border: '1px solid var(--border-glow)', gap: 6, backdropFilter: 'blur(10px)' }}
+              >
+                <UserIcon size={14} style={{ color: 'var(--nova-purple)' }} />
+                <span className="font-pixel" style={{ fontSize: '0.7rem' }}>LOGIN / SYNC</span>
+              </motion.button>
+            )}
+
+            <motion.button
+              onClick={() => setAiOpen(true)}
+              whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(168,85,247,0.5)' }}
+              whileTap={{ scale: 0.95 }}
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, var(--nova-purple), var(--nova-cyan))',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+                boxShadow: '0 0 15px rgba(168,85,247,0.3)',
+              }}
+              title="Open AI Assistant"
+            >
+              <Sparkles size={20} />
+            </motion.button>
           </div>
+        )}
 
-          {/* Footer */}
-          {!focusMode && <Footer />}
-        </main>
-      </div>
-    </QueryClientProvider>
+        {/* Main Layout */}
+        <div
+          className="nova-layout"
+          style={{ position: 'relative', zIndex: 1 }}
+        >
+          {/* Sidebar */}
+          <AnimatePresence>
+            {!focusMode && <Sidebar />}
+          </AnimatePresence>
+
+          {/* Main Area */}
+          <main className="nova-main">
+            {/* Header */}
+            {!focusMode && <Header />}
+
+            {/* Content */}
+            <div className="nova-content nova-scroll">
+              <Suspense fallback={<PageLoader />}>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeView}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                  >
+                    <ViewRouter view={activeView} />
+                  </motion.div>
+                </AnimatePresence>
+              </Suspense>
+            </div>
+
+            {/* Footer */}
+            {!focusMode && <Footer />}
+          </main>
+        </div>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 

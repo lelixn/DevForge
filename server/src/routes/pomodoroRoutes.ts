@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { logSession, getStats } from '../controllers/pomodoroController';
-import { authenticate } from '../middleware/auth';
+import { authenticateJWT } from '../middlewares/authMiddleware';
 
 const router = Router();
 
-router.use(authenticate);
+router.use(authenticateJWT);
 
-router.post('/log', logSession);
-router.get('/stats', getStats);
+router.post('/log', logSession as any);
+router.get('/stats', getStats as any);
 
 export default router;

@@ -6,6 +6,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 
@@ -15,6 +16,12 @@ import todoRoutes from './routes/todoRoutes';
 import bookmarkRoutes from './routes/bookmarkRoutes';
 import pomodoroRoutes from './routes/pomodoroRoutes';
 import snippetRoutes from './routes/snippetRoutes';
+import aiRoutes from './routes/aiRoutes';
+import preferenceRoutes from './routes/preferenceRoutes';
+
+// Import Error Middleware
+import { errorHandler, notFoundHandler } from './middlewares/errorMiddleware';
+import { logger } from './utils/logger';
 
 dotenv.config();
 
@@ -34,10 +41,11 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
 app.use(cors({
-  origin: '*', // For chrome extension endpoints
+  origin: true,
   credentials: true,
 }));
 app.use(compression());
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
@@ -45,7 +53,7 @@ app.use(morgan('dev'));
 // Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 1000, // Limit each IP to 1000 requests per window
+  max: 1000,
   message: 'Too many requests from this IP, please try again after 15 minutes',
 });
 app.use('/api/', limiter);
@@ -61,25 +69,28 @@ app.use('/api/todos', todoRoutes);
 app.use('/api/bookmarks', bookmarkRoutes);
 app.use('/api/pomodoro', pomodoroRoutes);
 app.use('/api/snippets', snippetRoutes);
+app.use('/api/ai', aiRoutes);
+app.use('/api/preferences', preferenceRoutes);
+
+// Error Handling Middlewares
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 // Socket.io connection handlers
 io.on('connection', (socket) => {
-  console.log(`Socket connected: ${socket.id}`);
+  logger.info(`Socket connected: ${socket.id}`);
 
-  // User joins room representing their account
   socket.on('join', (userId: string) => {
     socket.join(userId);
-    console.log(`User ${userId} joined their synchronization room`);
+    logger.info(`User ${userId} joined their synchronization room`);
   });
 
-  // Client notifies that items were updated
   socket.on('sync-trigger', (data: { userId: string; type: string }) => {
-    // Broadcast updates to all other clients for the same user
     socket.to(data.userId).emit('sync-update', { type: data.type });
   });
 
   socket.on('disconnect', () => {
-    console.log(`Socket disconnected: ${socket.id}`);
+    logger.info(`Socket disconnected: ${socket.id}`);
   });
 });
 
@@ -90,12 +101,11 @@ const PORT = process.env.PORT || 5000;
 mongoose
   .connect(MONGO_URI)
   .then(() => {
-    console.log('MongoDB successfully connected');
+    logger.info('MongoDB successfully connected');
     server.listen(PORT, () => {
-      console.log(`NOVA://OS Server is active on port ${PORT}`);
+      logger.info(`NOVA://OS Express Server active on port ${PORT}`);
     });
   })
   .catch((err) => {
-    console.error('MongoDB connection failure:', err);
-    process.exit(1);
+    logger.error('MongoDB connection failure:', err);
   });

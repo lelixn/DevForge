@@ -1,17 +1,17 @@
 import { Router } from 'express';
 import { getSnippets, createSnippet, updateSnippet, deleteSnippet } from '../controllers/snippetController';
-import { authenticate } from '../middleware/auth';
+import { authenticateJWT } from '../middlewares/authMiddleware';
 
 const router = Router();
 
-router.use(authenticate);
+router.use(authenticateJWT);
 
 router.route('/')
-  .get(getSnippets)
-  .post(createSnippet);
+  .get(getSnippets as any)
+  .post(createSnippet as any);
 
 router.route('/:id')
-  .put(updateSnippet)
-  .delete(deleteSnippet);
+  .put(updateSnippet as any)
+  .delete(deleteSnippet as any);
 
 export default router;

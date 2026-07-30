@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ISnippet extends Document {
-  user: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
   title: string;
   command: string;
   description?: string;
@@ -13,7 +13,7 @@ export interface ISnippet extends Document {
 }
 
 const SnippetSchema = new Schema<ISnippet>({
-  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   title: { type: String, required: true, trim: true },
   command: { type: String, required: true, trim: true },
   description: { type: String },
@@ -26,4 +26,4 @@ const SnippetSchema = new Schema<ISnippet>({
   isFavorite: { type: Boolean, default: false },
 }, { timestamps: true });
 
-export default mongoose.model<ISnippet>('Snippet', SnippetSchema);
+export const Snippet = mongoose.model<ISnippet>('Snippet', SnippetSchema);

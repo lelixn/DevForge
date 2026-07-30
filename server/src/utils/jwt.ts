@@ -10,13 +10,13 @@ export interface TokenPayload {
 
 export const generateAccessToken = (payload: TokenPayload): string => {
   return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: process.env.JWT_ACCESS_EXPIRATION || '15m',
+    expiresIn: (process.env.JWT_ACCESS_EXPIRATION || '15m') as any,
   });
 };
 
 export const generateRefreshToken = (payload: TokenPayload): string => {
   return jwt.sign(payload, JWT_REFRESH_SECRET, {
-    expiresIn: process.env.JWT_REFRESH_EXPIRATION || '7d',
+    expiresIn: (process.env.JWT_REFRESH_EXPIRATION || '7d') as any,
   });
 };
 

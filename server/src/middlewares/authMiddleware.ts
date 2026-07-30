@@ -2,15 +2,21 @@ import { Request, Response, NextFunction } from 'express';
 import { verifyAccessToken } from '../utils/jwt';
 import { ApiError } from '../utils/apiError';
 
-export interface AuthenticatedRequest extends Request {
-  user?: {
-    userId: string;
-    email: string;
-  };
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        userId: string;
+        email: string;
+      };
+    }
+  }
 }
 
+export type AuthenticatedRequest = Request;
+
 export const authenticateJWT = (
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, RotateCcw, Coffee, Target, Clock, Flame, BarChart3 } from 'lucide-react';
 import { usePomodoroStore } from '../store/pomodoroStore';
+import { ambientEngine } from '../utils/audio';
 import { formatTime, chromeNotify } from '@shared/utils';
 import type { PomodoroMode } from '@shared/types';
 
@@ -293,7 +294,7 @@ export const PomodoroPage: React.FC = () => {
                 {sessionCount % 4}/4 until long break
               </span>
             </div>
-            <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
               {Array.from({ length: 4 }, (_, i) => (
                 <motion.div
                   key={i}
@@ -311,6 +312,39 @@ export const PomodoroPage: React.FC = () => {
                   }}
                 />
               ))}
+            </div>
+
+            {/* Ambient Sound Bar */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border-subtle)', paddingTop: 12 }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'JetBrains Mono' }}>
+                🔊 AMBIENT AUDIO
+              </span>
+              <div style={{ display: 'flex', gap: 6 }}>
+                {['rain', 'white', 'lofi'].map((sound) => (
+                  <button
+                    key={sound}
+                    onClick={() => {
+                      if (ambientEngine.getActiveSound() === sound) {
+                        ambientEngine.stop();
+                      } else {
+                        ambientEngine.play(sound as any);
+                      }
+                    }}
+                    className="nova-chip"
+                    style={{
+                      fontSize: '0.65rem',
+                      padding: '2px 8px',
+                      textTransform: 'capitalize',
+                      cursor: 'pointer',
+                      background: ambientEngine.getActiveSound() === sound ? 'var(--purple-alpha-20)' : 'transparent',
+                      borderColor: ambientEngine.getActiveSound() === sound ? 'var(--nova-purple)' : 'var(--border-subtle)',
+                      color: ambientEngine.getActiveSound() === sound ? 'var(--nova-purple)' : 'var(--text-muted)',
+                    }}
+                  >
+                    {sound}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

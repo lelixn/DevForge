@@ -11,12 +11,12 @@ import {
 
 const router = Router();
 
-router.post('/register', validateRequest(registerSchema), AuthController.register);
-router.post('/login', validateRequest(loginSchema), AuthController.login);
-router.post('/refresh', AuthController.refreshToken);
-router.post('/logout', authenticateJWT, AuthController.logout);
-router.get('/me', authenticateJWT, AuthController.me);
-router.post('/forgot-password', validateRequest(forgotPasswordSchema), AuthController.forgotPassword);
-router.post('/reset-password', validateRequest(resetPasswordSchema), AuthController.resetPassword);
+router.post('/register', validateRequest(registerSchema), AuthController.register as any);
+router.post('/login', validateRequest(loginSchema), AuthController.login as any);
+router.post('/refresh', AuthController.refreshToken as any);
+router.post('/logout', authenticateJWT, AuthController.logout as any);
+router.get('/me', authenticateJWT, AuthController.me as any);
+router.post('/forgot-password', validateRequest(forgotPasswordSchema), AuthController.forgotPassword as any);
+router.post('/reset-password', validateRequest(resetPasswordSchema), AuthController.resetPassword as any);
 
 export default router;

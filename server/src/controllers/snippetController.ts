@@ -1,26 +1,29 @@
 import { Response } from 'express';
-import Snippet from '../models/Snippet';
-import { AuthenticatedRequest } from '../middleware/auth';
+import { Snippet } from '../models/Snippet';
+import { AuthenticatedRequest } from '../middlewares/authMiddleware';
+import { ApiResponse } from '../utils/apiResponse';
 
 export const getSnippets = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
-    const snippets = await Snippet.find({ user: req.userId }).sort({ isFavorite: -1, updatedAt: -1 });
-    res.status(200).json(snippets);
+    const userId = req.user?.userId;
+    const snippets = await Snippet.find({ userId }).sort({ isFavorite: -1, updatedAt: -1 });
+    ApiResponse.success(res, 200, snippets);
   } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Failed to fetch snippets' });
+    ApiResponse.error(res, 500, error.message || 'Failed to fetch snippets');
   }
 };
 
 export const createSnippet = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
+    const userId = req.user?.userId;
     const { title, command, description, category, tags, isFavorite } = req.body;
     if (!title || !command) {
-      res.status(400).json({ message: 'Title and Command are required' });
+      ApiResponse.error(res, 400, 'Title and Command are required');
       return;
     }
 
     const snippet = new Snippet({
-      user: req.userId,
+      userId,
       title,
       command,
       description,
@@ -30,44 +33,46 @@ export const createSnippet = async (req: AuthenticatedRequest, res: Response): P
     });
 
     await snippet.save();
-    res.status(201).json(snippet);
+    ApiResponse.created(res, snippet);
   } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Failed to create snippet' });
+    ApiResponse.error(res, 500, error.message || 'Failed to create snippet');
   }
 };
 
 export const updateSnippet = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
+    const userId = req.user?.userId;
     const { id } = req.params;
     const snippet = await Snippet.findOneAndUpdate(
-      { _id: id, user: req.userId },
+      { _id: id, userId },
       { $set: req.body },
       { new: true }
     );
 
     if (!snippet) {
-      res.status(404).json({ message: 'Snippet not found' });
+      ApiResponse.error(res, 404, 'Snippet not found');
       return;
     }
 
-    res.status(200).json(snippet);
+    ApiResponse.success(res, 200, snippet);
   } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Failed to update snippet' });
+    ApiResponse.error(res, 500, error.message || 'Failed to update snippet');
   }
 };
 
 export const deleteSnippet = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
+    const userId = req.user?.userId;
     const { id } = req.params;
-    const snippet = await Snippet.findOneAndDelete({ _id: id, user: req.userId });
+    const snippet = await Snippet.findOneAndDelete({ _id: id, userId });
 
     if (!snippet) {
-      res.status(404).json({ message: 'Snippet not found' });
+      ApiResponse.error(res, 404, 'Snippet not found');
       return;
     }
 
-    res.status(200).json({ message: 'Snippet deleted successfully', id });
+    ApiResponse.success(res, 200, { id }, 'Snippet deleted successfully');
   } catch (error: any) {
-    res.status(500).json({ message: error.message || 'Failed to delete snippet' });
+    ApiResponse.error(res, 500, error.message || 'Failed to delete snippet');
   }
 };

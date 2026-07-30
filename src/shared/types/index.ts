@@ -26,6 +26,13 @@ export interface AuthState {
 export type TodoPriority = 'low' | 'medium' | 'high';
 export type TodoCategory = 'work' | 'personal' | 'learning' | 'health' | 'other';
 export type TodoStatus = 'pending' | 'completed';
+export type RecurringSchedule = 'none' | 'daily' | 'weekly' | 'monthly';
+
+export interface SubTask {
+  id: string;
+  title: string;
+  completed: boolean;
+}
 
 export interface Todo {
   id: string;
@@ -36,6 +43,8 @@ export interface Todo {
   category: TodoCategory;
   deadline?: string;
   tags?: string[];
+  subtasks?: SubTask[];
+  recurring?: RecurringSchedule;
   order: number;
   createdAt: string;
   updatedAt: string;
