@@ -1,7 +1,8 @@
-import { createFileRoute, Link, useSearch } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ShieldCheck, ArrowRight } from 'lucide-react';
+import { z } from 'zod';
 
 import { AuthLayout } from '@/layouts/auth-layout';
 import { RequireGuest } from '@/shared/guards/require-guest';
@@ -13,12 +14,17 @@ import {
 import { useAuth } from '@/hooks/use-auth';
 import { ForgeButton } from '@/components/forge/ForgeButton';
 
+const resetPasswordSearchSchema = z.object({
+  token: z.string().optional(),
+});
+
 export const Route = createFileRoute('/reset-password')({
+  validateSearch: (search: Record<string, unknown>) => resetPasswordSearchSchema.parse(search),
   component: ResetPasswordPage,
 });
 
 function ResetPasswordPage() {
-  const search = useSearch({ strict: false }) as { token?: string };
+  const search = Route.useSearch();
   const token = search.token || 'demo_reset_token_123';
   const { resetPassword, isLoading } = useAuth();
 

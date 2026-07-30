@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-07-29T18:01:58+0530",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.17 (Microsoft)"
+    date = "2026-07-29T18:09:33+0530",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.100.v20260624-0231, environment: Java 21.0.11 (Eclipse Adoptium)"
 )
 @Component
 public class WorkspaceMapperImpl implements WorkspaceMapper {
@@ -32,13 +32,13 @@ public class WorkspaceMapperImpl implements WorkspaceMapper {
 
         WorkspaceDto.WorkspaceDtoBuilder workspaceDto = WorkspaceDto.builder();
 
-        workspaceDto.id( workspace.getId() );
-        workspaceDto.name( workspace.getName() );
-        workspaceDto.slug( workspace.getSlug() );
-        workspaceDto.description( workspace.getDescription() );
-        workspaceDto.owner( userMapper.toUserDto( workspace.getOwner() ) );
-        workspaceDto.members( workspaceMemberSetToWorkspaceMemberDtoList( workspace.getMembers() ) );
         workspaceDto.createdAt( workspace.getCreatedAt() );
+        workspaceDto.description( workspace.getDescription() );
+        workspaceDto.id( workspace.getId() );
+        workspaceDto.members( workspaceMemberSetToWorkspaceMemberDtoList( workspace.getMembers() ) );
+        workspaceDto.name( workspace.getName() );
+        workspaceDto.owner( userMapper.toUserDto( workspace.getOwner() ) );
+        workspaceDto.slug( workspace.getSlug() );
         workspaceDto.updatedAt( workspace.getUpdatedAt() );
 
         return workspaceDto.build();
@@ -54,9 +54,9 @@ public class WorkspaceMapperImpl implements WorkspaceMapper {
 
         workspaceMemberDto.workspaceId( memberWorkspaceId( member ) );
         workspaceMemberDto.id( member.getId() );
-        workspaceMemberDto.user( userMapper.toUserDto( member.getUser() ) );
-        workspaceMemberDto.role( member.getRole() );
         workspaceMemberDto.joinedAt( member.getJoinedAt() );
+        workspaceMemberDto.role( member.getRole() );
+        workspaceMemberDto.user( userMapper.toUserDto( member.getUser() ) );
 
         return workspaceMemberDto.build();
     }

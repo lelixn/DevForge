@@ -1,7 +1,8 @@
-import { createFileRoute, Link, useSearch } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Mail, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { z } from 'zod';
 
 import { AuthLayout } from '@/layouts/auth-layout';
 import { RequireGuest } from '@/shared/guards/require-guest';
@@ -10,12 +11,17 @@ import { loginSchema, type LoginSchemaType } from '@/features/auth/schemas/login
 import { useAuth } from '@/hooks/use-auth';
 import { ForgeButton } from '@/components/forge/ForgeButton';
 
+const loginSearchSchema = z.object({
+  redirect: z.string().optional(),
+});
+
 export const Route = createFileRoute('/login')({
+  validateSearch: (search: Record<string, unknown>) => loginSearchSchema.parse(search),
   component: LoginPage,
 });
 
 function LoginPage() {
-  const search = useSearch({ strict: false }) as { redirect?: string };
+  const search = Route.useSearch();
   const { login, isLoading } = useAuth();
 
   const {

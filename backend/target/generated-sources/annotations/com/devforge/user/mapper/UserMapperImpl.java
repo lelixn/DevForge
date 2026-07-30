@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-07-29T18:01:58+0530",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.17 (Microsoft)"
+    date = "2026-07-29T18:09:34+0530",
+    comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.46.100.v20260624-0231, environment: Java 21.0.11 (Eclipse Adoptium)"
 )
 @Component
 public class UserMapperImpl implements UserMapper {
@@ -25,14 +25,14 @@ public class UserMapperImpl implements UserMapper {
 
         UserDto.UserDtoBuilder userDto = UserDto.builder();
 
-        userDto.id( user.getId() );
-        userDto.email( user.getEmail() );
-        userDto.fullName( user.getFullName() );
         userDto.avatarUrl( user.getAvatarUrl() );
-        userDto.enabled( user.isEnabled() );
-        userDto.emailVerified( user.isEmailVerified() );
-        userDto.lastLoginAt( user.getLastLoginAt() );
         userDto.createdAt( user.getCreatedAt() );
+        userDto.email( user.getEmail() );
+        userDto.emailVerified( user.isEmailVerified() );
+        userDto.enabled( user.isEnabled() );
+        userDto.fullName( user.getFullName() );
+        userDto.id( user.getId() );
+        userDto.lastLoginAt( user.getLastLoginAt() );
         userDto.roles( roleSetToRoleDtoSet( user.getRoles() ) );
 
         return userDto.build();
@@ -47,9 +47,9 @@ public class UserMapperImpl implements UserMapper {
         RoleDto.RoleDtoBuilder roleDto = RoleDto.builder();
 
         roleDto.permissions( mapPermissionsToStrings( role.getPermissions() ) );
+        roleDto.description( role.getDescription() );
         roleDto.id( role.getId() );
         roleDto.name( role.getName() );
-        roleDto.description( role.getDescription() );
 
         return roleDto.build();
     }

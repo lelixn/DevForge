@@ -1,16 +1,22 @@
 import { useState, useEffect } from 'react';
-import { createFileRoute, Link, useSearch } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 import { CheckCircle2, AlertCircle, Loader2, ArrowRight } from 'lucide-react';
+import { z } from 'zod';
 import { AuthLayout } from '@/layouts/auth-layout';
 import { AuthService } from '@/services/auth.service';
 import { ForgeButton } from '@/components/forge/ForgeButton';
 
+const verifyEmailSearchSchema = z.object({
+  token: z.string().optional(),
+});
+
 export const Route = createFileRoute('/verify-email')({
+  validateSearch: (search: Record<string, unknown>) => verifyEmailSearchSchema.parse(search),
   component: VerifyEmailPage,
 });
 
 function VerifyEmailPage() {
-  const search = useSearch({ strict: false }) as { token?: string };
+  const search = Route.useSearch();
   const token = search.token || 'demo_verify_token_123';
 
   const [status, setStatus] = useState<'verifying' | 'success' | 'error'>('verifying');
