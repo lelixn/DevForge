@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@/components/theme-provider';
+import { SessionProvider } from '@/shared/guards/SessionProvider';
 
-// Create a query client with production-grade configuration
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -21,7 +21,7 @@ export function Providers({ children }: ProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="devforge-theme">
-        {children}
+        <SessionProvider>{children}</SessionProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

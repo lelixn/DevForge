@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root';
 import { Route as IndexRouteImport } from './routes/index';
+import { Route as DashboardRouteImport } from './routes/dashboard';
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password';
 import { Route as LandingRouteImport } from './routes/landing';
 import { Route as LoginRouteImport } from './routes/login';
@@ -36,6 +37,11 @@ import { Route as TeamsIndexRouteImport } from './routes/teams/index';
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any);
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -151,6 +157,7 @@ const TeamsIndexRoute = TeamsIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
+  '/dashboard': typeof DashboardRoute;
   '/forgot-password': typeof ForgotPasswordRoute;
   '/landing': typeof LandingRoute;
   '/login': typeof LoginRoute;
@@ -176,6 +183,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
+  '/dashboard': typeof DashboardRoute;
   '/forgot-password': typeof ForgotPasswordRoute;
   '/landing': typeof LandingRoute;
   '/login': typeof LoginRoute;
@@ -202,6 +210,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   '/': typeof IndexRoute;
+  '/dashboard': typeof DashboardRoute;
   '/forgot-password': typeof ForgotPasswordRoute;
   '/landing': typeof LandingRoute;
   '/login': typeof LoginRoute;
@@ -229,6 +238,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | '/'
+    | '/dashboard'
     | '/forgot-password'
     | '/landing'
     | '/login'
@@ -254,6 +264,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo;
   to:
     | '/'
+    | '/dashboard'
     | '/forgot-password'
     | '/landing'
     | '/login'
@@ -279,6 +290,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/dashboard'
     | '/forgot-password'
     | '/landing'
     | '/login'
@@ -305,6 +317,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  DashboardRoute: typeof DashboardRoute;
   ForgotPasswordRoute: typeof ForgotPasswordRoute;
   LandingRoute: typeof LandingRoute;
   LoginRoute: typeof LoginRoute;
@@ -336,6 +349,13 @@ declare module '@tanstack/react-router' {
       path: '/';
       fullPath: '/';
       preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/dashboard': {
+      id: '/dashboard';
+      path: '/dashboard';
+      fullPath: '/dashboard';
+      preLoaderRoute: typeof DashboardRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     '/forgot-password': {
@@ -497,6 +517,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LandingRoute: LandingRoute,
   LoginRoute: LoginRoute,

@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
 import {
   FolderKanban,
@@ -23,10 +23,22 @@ import {
   ForgeActivity,
 } from '@/components/forge';
 import type { TimelineItem } from '@/components/forge/ForgeTimeline';
+import { useAuthStore } from '@/stores/auth';
+import { LandingPage } from './landing';
 
 export const Route = createFileRoute('/')({
-  component: DashboardPage,
+  component: RootRouteComponent,
 });
+
+function RootRouteComponent() {
+  const { isAuthenticated } = useAuthStore();
+
+  if (!isAuthenticated) {
+    return <LandingPage />;
+  }
+
+  return <DashboardPage />;
+}
 
 // ── Mock Data ─────────────────────────────────────────────────
 const STAT_CARDS = [
@@ -158,6 +170,9 @@ const RECENT_DEPLOYMENTS = [
 ];
 
 function DashboardPage() {
+  const navigate = useNavigate();
+  const { user } = useAuthStore();
+
   return (
     <div className="min-h-screen bg-[#07070A] p-6 lg:p-10 space-y-8 max-w-[1600px] mx-auto">
       {/* ── 1. MISSION OVERVIEW HEADLINE ───────────────────────── */}
@@ -179,7 +194,10 @@ function DashboardPage() {
             </div>
 
             <h1 className="text-2xl lg:text-3xl font-extrabold text-white tracking-tight font-sans">
-              Welcome back, <span className="text-[var(--df-primary-light)]">Alex Mercer</span>
+              Welcome back,{' '}
+              <span className="text-[var(--df-primary-light)]">
+                {user?.fullName || 'Alex Mercer'}
+              </span>
             </h1>
 
             <p className="text-xs lg:text-sm text-[var(--df-muted-foreground)] leading-relaxed font-sans">
@@ -194,7 +212,7 @@ function DashboardPage() {
               variant="gradient"
               size="md"
               leftIcon={<Plus className="h-4 w-4" />}
-              onClick={() => (window.location.href = '/projects')}
+              onClick={() => navigate({ to: '/projects' })}
             >
               New Project
             </ForgeButton>
@@ -202,7 +220,7 @@ function DashboardPage() {
               variant="secondary"
               size="md"
               leftIcon={<Sparkles className="h-4 w-4 text-[var(--df-accent)]" />}
-              onClick={() => (window.location.href = '/ai')}
+              onClick={() => navigate({ to: '/ai' })}
             >
               Ask AI Workspace
             </ForgeButton>
@@ -239,7 +257,7 @@ function DashboardPage() {
                 variant="ghost"
                 size="xs"
                 rightIcon={<ChevronRight className="h-3.5 w-3.5" />}
-                onClick={() => (window.location.href = '/projects')}
+                onClick={() => navigate({ to: '/projects' })}
               >
                 View All
               </ForgeButton>
@@ -390,7 +408,7 @@ function DashboardPage() {
                 variant="command"
                 size="sm"
                 leftIcon={<GitBranch className="h-3.5 w-3.5" />}
-                onClick={() => (window.location.href = '/projects')}
+                onClick={() => navigate({ to: '/projects' })}
               >
                 Create Branch
               </ForgeButton>
@@ -398,7 +416,7 @@ function DashboardPage() {
                 variant="command"
                 size="sm"
                 leftIcon={<Terminal className="h-3.5 w-3.5" />}
-                onClick={() => (window.location.href = '/tasks')}
+                onClick={() => navigate({ to: '/tasks' })}
               >
                 Backlog
               </ForgeButton>
@@ -406,7 +424,7 @@ function DashboardPage() {
                 variant="command"
                 size="sm"
                 leftIcon={<Sparkles className="h-3.5 w-3.5" />}
-                onClick={() => (window.location.href = '/ai')}
+                onClick={() => navigate({ to: '/ai' })}
               >
                 AI Audit
               </ForgeButton>
@@ -414,7 +432,7 @@ function DashboardPage() {
                 variant="command"
                 size="sm"
                 leftIcon={<Zap className="h-3.5 w-3.5" />}
-                onClick={() => (window.location.href = '/analytics')}
+                onClick={() => navigate({ to: '/analytics' })}
               >
                 Analytics
               </ForgeButton>

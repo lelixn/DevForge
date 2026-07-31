@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { useRouterState } from '@tanstack/react-router';
+import { useRouterState, useNavigate } from '@tanstack/react-router';
 import { Bell, Sun, Moon, Settings, LogOut, User, Menu, Sparkles, Terminal } from 'lucide-react';
 import { useTheme } from '@/hooks/use-theme';
+import { useAuth } from '@/hooks/use-auth';
 import { useSidebarStore } from '@/stores/sidebar';
 import { ForgeAvatar } from '@/components/forge/ForgeAvatar';
 import { ForgeBadge } from '@/components/forge/ForgeBadge';
@@ -27,6 +28,8 @@ const PATH_MAP: Record<string, string> = {
 export function Header() {
   const [commandOpen, setCommandOpen] = useState(false);
   const { theme, setTheme } = useTheme();
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
   const { setMobileOpen } = useSidebarStore();
   const currentPath = useRouterState({ select: (s) => s.location.pathname });
 
@@ -39,20 +42,20 @@ export function Header() {
       id: 'profile',
       label: 'Engineer Profile',
       icon: <User className="h-4 w-4" />,
-      onClick: () => (window.location.href = '/profile'),
+      onClick: () => navigate({ to: '/profile' }),
     },
     {
       id: 'settings',
       label: 'Workspace Settings',
       icon: <Settings className="h-4 w-4" />,
-      onClick: () => (window.location.href = '/settings'),
+      onClick: () => navigate({ to: '/settings' }),
     },
     {
       id: 'logout',
       label: 'Sign Out',
       icon: <LogOut className="h-4 w-4" />,
       danger: true,
-      onClick: () => (window.location.href = '/login'),
+      onClick: () => logout(),
     },
   ];
 
@@ -91,7 +94,7 @@ export function Header() {
             variant="gradient"
             size="sm"
             leftIcon={<Sparkles className="h-3.5 w-3.5" />}
-            onClick={() => (window.location.href = '/ai')}
+            onClick={() => navigate({ to: '/ai' })}
             className="hidden sm:inline-flex"
           >
             Forge AI
@@ -108,7 +111,7 @@ export function Header() {
           {/* Notifications Button */}
           <div className="relative">
             <button
-              onClick={() => (window.location.href = '/notifications')}
+              onClick={() => navigate({ to: '/notifications' })}
               className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--df-border)] bg-[var(--df-surface)] text-[var(--df-muted-foreground)] hover:border-[var(--df-border-strong)] hover:text-white transition-colors cursor-pointer"
             >
               <Bell className="h-4 w-4" />
@@ -130,7 +133,12 @@ export function Header() {
           <ForgeDropdown
             trigger={
               <button className="flex items-center gap-2 cursor-pointer outline-none">
-                <ForgeAvatar name="Alex Mercer" status="online" size="sm" glow />
+                <ForgeAvatar
+                  name={user?.fullName || 'Alex Mercer'}
+                  status="online"
+                  size="sm"
+                  glow
+                />
               </button>
             }
             items={profileMenuItems}

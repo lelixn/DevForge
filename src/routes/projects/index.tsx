@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { Plus, LayoutGrid, List, Folder } from 'lucide-react';
 import {
@@ -9,12 +9,20 @@ import {
   ForgeTabs,
   ForgeEmpty,
 } from '@/components/forge';
+import { ProtectedRoute } from '@/shared/guards/ProtectedRoute';
 import { PROJECTS } from '@/shared/data';
 import { cn } from '@/utils/cn';
 
-export const Route = createFileRoute('/projects/')({ component: ProjectsPage });
+export const Route = createFileRoute('/projects/')({
+  component: () => (
+    <ProtectedRoute>
+      <ProjectsPage />
+    </ProtectedRoute>
+  ),
+});
 
 function ProjectsPage() {
+  const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [view, setView] = useState<'grid' | 'list'>('grid');
@@ -120,7 +128,7 @@ function ProjectsPage() {
               key={p.id}
               hoverable
               spotlight
-              onClick={() => (window.location.href = `/projects/${p.id}`)}
+              onClick={() => navigate({ to: '/projects/$id', params: { id: p.id } })}
               className="p-6 cursor-pointer space-y-4"
             >
               <div className="flex items-start justify-between">

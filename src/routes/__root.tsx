@@ -5,6 +5,7 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { LoadingFallback } from '@/components/loading-fallback';
 import { Toaster } from '@/components/ui/sonner';
 import { AppShell } from '@/layouts/app-shell';
+import { useAuthStore } from '@/stores/auth';
 
 interface RouterContext {
   queryClient: QueryClient;
@@ -33,9 +34,13 @@ const STANDALONE_ROUTES = [
 
 function RootComponent() {
   const location = useLocation();
-  const isStandalone = STANDALONE_ROUTES.some(
-    (path) => location.pathname === path || location.pathname.startsWith(path + '/')
-  );
+  const { isAuthenticated } = useAuthStore();
+
+  const isStandalone =
+    STANDALONE_ROUTES.some(
+      (path) => location.pathname === path || location.pathname.startsWith(path + '/')
+    ) ||
+    (location.pathname === '/' && !isAuthenticated);
 
   return (
     <>
