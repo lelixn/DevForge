@@ -1,26 +1,21 @@
 import { useEffect } from 'react';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthCoreStore } from '@/stores/auth.store';
 import { getAccessToken, isTokenExpired } from '@/services/api/token';
 import { clearAllStores } from '@/stores';
-import { LoadingFallback } from '@/components/loading-fallback';
 
 export interface SessionProviderProps {
   children: React.ReactNode;
 }
 
 export function SessionProvider({ children }: SessionProviderProps) {
-  const { isAuthenticated, isInitialized, setInitialized } = useAuthStore();
-
   useEffect(() => {
     // Session validation on app boot / mount
     const validateSession = () => {
       const token = getAccessToken();
-      if (!token || isTokenExpired(token)) {
-        if (useAuthStore.getState().isAuthenticated) {
-          clearAllStores();
-        }
+      const { isAuthenticated } = useAuthCoreStore.getState();
+      if ((!token || isTokenExpired(token)) && isAuthenticated) {
+        clearAllStores();
       }
-      setInitialized(true);
     };
 
     validateSession();
@@ -38,11 +33,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
 
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
-  }, [setInitialized]);
-
-  if (!isInitialized) {
-    return <LoadingFallback />;
-  }
+  }, []);
 
   return <>{children}</>;
 }

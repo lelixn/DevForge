@@ -1,6 +1,5 @@
 import { Navigate, useLocation } from '@tanstack/react-router';
 import { useAuthStore } from '@/stores/auth';
-import { LoadingFallback } from '@/components/loading-fallback';
 
 export interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -8,12 +7,8 @@ export interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, requireWorkspace = false }: ProtectedRouteProps) {
-  const { isAuthenticated, isInitialized, currentWorkspace } = useAuthStore();
+  const { isAuthenticated, currentWorkspace } = useAuthStore();
   const location = useLocation();
-
-  if (!isInitialized) {
-    return <LoadingFallback />;
-  }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" search={{ redirect: location.pathname }} replace />;

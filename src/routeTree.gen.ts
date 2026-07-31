@@ -8,234 +8,235 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root';
-import { Route as IndexRouteImport } from './routes/index';
-import { Route as DashboardRouteImport } from './routes/dashboard';
-import { Route as ForgotPasswordRouteImport } from './routes/forgot-password';
-import { Route as LandingRouteImport } from './routes/landing';
-import { Route as LoginRouteImport } from './routes/login';
-import { Route as RegisterRouteImport } from './routes/register';
-import { Route as ResetPasswordRouteImport } from './routes/reset-password';
-import { Route as SessionExpiredRouteImport } from './routes/session-expired';
-import { Route as UnauthorizedRouteImport } from './routes/unauthorized';
-import { Route as VerifyEmailRouteImport } from './routes/verify-email';
-import { Route as AiIndexRouteImport } from './routes/ai/index';
-import { Route as AnalyticsIndexRouteImport } from './routes/analytics/index';
-import { Route as ApiWorkspaceIndexRouteImport } from './routes/api-workspace/index';
-import { Route as DocumentationIndexRouteImport } from './routes/documentation/index';
-import { Route as NotificationsIndexRouteImport } from './routes/notifications/index';
-import { Route as OnboardingCreateWorkspaceRouteImport } from './routes/onboarding/create-workspace';
-import { Route as OnboardingInviteMembersRouteImport } from './routes/onboarding/invite-members';
-import { Route as ProfileIndexRouteImport } from './routes/profile/index';
-import { Route as ProjectsIndexRouteImport } from './routes/projects/index';
-import { Route as ProjectsIdRouteImport } from './routes/projects/$id';
-import { Route as SearchIndexRouteImport } from './routes/search/index';
-import { Route as SettingsIndexRouteImport } from './routes/settings/index';
-import { Route as TasksIndexRouteImport } from './routes/tasks/index';
-import { Route as TeamsIndexRouteImport } from './routes/teams/index';
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as LandingRouteImport } from './routes/landing'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SessionExpiredRouteImport } from './routes/session-expired'
+import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as AiIndexRouteImport } from './routes/ai/index'
+import { Route as AnalyticsIndexRouteImport } from './routes/analytics/index'
+import { Route as ApiWorkspaceIndexRouteImport } from './routes/api-workspace/index'
+import { Route as DocumentationIndexRouteImport } from './routes/documentation/index'
+import { Route as NotificationsIndexRouteImport } from './routes/notifications/index'
+import { Route as OnboardingCreateWorkspaceRouteImport } from './routes/onboarding/create-workspace'
+import { Route as OnboardingInviteMembersRouteImport } from './routes/onboarding/invite-members'
+import { Route as ProfileIndexRouteImport } from './routes/profile/index'
+import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
+import { Route as ProjectsIdRouteImport } from './routes/projects/$id'
+import { Route as SearchIndexRouteImport } from './routes/search/index'
+import { Route as SettingsIndexRouteImport } from './routes/settings/index'
+import { Route as TasksIndexRouteImport } from './routes/tasks/index'
+import { Route as TeamsIndexRouteImport } from './routes/teams/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const LandingRoute = LandingRouteImport.update({
   id: '/landing',
   path: '/landing',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const SessionExpiredRoute = SessionExpiredRouteImport.update({
   id: '/session-expired',
   path: '/session-expired',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const UnauthorizedRoute = UnauthorizedRouteImport.update({
   id: '/unauthorized',
   path: '/unauthorized',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
   path: '/verify-email',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AiIndexRoute = AiIndexRouteImport.update({
   id: '/ai/',
   path: '/ai/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AnalyticsIndexRoute = AnalyticsIndexRouteImport.update({
   id: '/analytics/',
   path: '/analytics/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ApiWorkspaceIndexRoute = ApiWorkspaceIndexRouteImport.update({
   id: '/api-workspace/',
   path: '/api-workspace/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const DocumentationIndexRoute = DocumentationIndexRouteImport.update({
   id: '/documentation/',
   path: '/documentation/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const NotificationsIndexRoute = NotificationsIndexRouteImport.update({
   id: '/notifications/',
   path: '/notifications/',
   getParentRoute: () => rootRouteImport,
-} as any);
-const OnboardingCreateWorkspaceRoute = OnboardingCreateWorkspaceRouteImport.update({
-  id: '/onboarding/create-workspace',
-  path: '/onboarding/create-workspace',
-  getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
+const OnboardingCreateWorkspaceRoute =
+  OnboardingCreateWorkspaceRouteImport.update({
+    id: '/onboarding/create-workspace',
+    path: '/onboarding/create-workspace',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const OnboardingInviteMembersRoute = OnboardingInviteMembersRouteImport.update({
   id: '/onboarding/invite-members',
   path: '/onboarding/invite-members',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ProfileIndexRoute = ProfileIndexRouteImport.update({
   id: '/profile/',
   path: '/profile/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ProjectsIdRoute = ProjectsIdRouteImport.update({
   id: '/projects/$id',
   path: '/projects/$id',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const SearchIndexRoute = SearchIndexRouteImport.update({
   id: '/search/',
   path: '/search/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const SettingsIndexRoute = SettingsIndexRouteImport.update({
   id: '/settings/',
   path: '/settings/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const TasksIndexRoute = TasksIndexRouteImport.update({
   id: '/tasks/',
   path: '/tasks/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const TeamsIndexRoute = TeamsIndexRouteImport.update({
   id: '/teams/',
   path: '/teams/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute;
-  '/dashboard': typeof DashboardRoute;
-  '/forgot-password': typeof ForgotPasswordRoute;
-  '/landing': typeof LandingRoute;
-  '/login': typeof LoginRoute;
-  '/register': typeof RegisterRoute;
-  '/reset-password': typeof ResetPasswordRoute;
-  '/session-expired': typeof SessionExpiredRoute;
-  '/unauthorized': typeof UnauthorizedRoute;
-  '/verify-email': typeof VerifyEmailRoute;
-  '/onboarding/create-workspace': typeof OnboardingCreateWorkspaceRoute;
-  '/onboarding/invite-members': typeof OnboardingInviteMembersRoute;
-  '/projects/$id': typeof ProjectsIdRoute;
-  '/ai/': typeof AiIndexRoute;
-  '/analytics/': typeof AnalyticsIndexRoute;
-  '/api-workspace/': typeof ApiWorkspaceIndexRoute;
-  '/documentation/': typeof DocumentationIndexRoute;
-  '/notifications/': typeof NotificationsIndexRoute;
-  '/profile/': typeof ProfileIndexRoute;
-  '/projects/': typeof ProjectsIndexRoute;
-  '/search/': typeof SearchIndexRoute;
-  '/settings/': typeof SettingsIndexRoute;
-  '/tasks/': typeof TasksIndexRoute;
-  '/teams/': typeof TeamsIndexRoute;
+  '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/landing': typeof LandingRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/session-expired': typeof SessionExpiredRoute
+  '/unauthorized': typeof UnauthorizedRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/onboarding/create-workspace': typeof OnboardingCreateWorkspaceRoute
+  '/onboarding/invite-members': typeof OnboardingInviteMembersRoute
+  '/projects/$id': typeof ProjectsIdRoute
+  '/ai/': typeof AiIndexRoute
+  '/analytics/': typeof AnalyticsIndexRoute
+  '/api-workspace/': typeof ApiWorkspaceIndexRoute
+  '/documentation/': typeof DocumentationIndexRoute
+  '/notifications/': typeof NotificationsIndexRoute
+  '/profile/': typeof ProfileIndexRoute
+  '/projects/': typeof ProjectsIndexRoute
+  '/search/': typeof SearchIndexRoute
+  '/settings/': typeof SettingsIndexRoute
+  '/tasks/': typeof TasksIndexRoute
+  '/teams/': typeof TeamsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute;
-  '/dashboard': typeof DashboardRoute;
-  '/forgot-password': typeof ForgotPasswordRoute;
-  '/landing': typeof LandingRoute;
-  '/login': typeof LoginRoute;
-  '/register': typeof RegisterRoute;
-  '/reset-password': typeof ResetPasswordRoute;
-  '/session-expired': typeof SessionExpiredRoute;
-  '/unauthorized': typeof UnauthorizedRoute;
-  '/verify-email': typeof VerifyEmailRoute;
-  '/onboarding/create-workspace': typeof OnboardingCreateWorkspaceRoute;
-  '/onboarding/invite-members': typeof OnboardingInviteMembersRoute;
-  '/projects/$id': typeof ProjectsIdRoute;
-  '/ai': typeof AiIndexRoute;
-  '/analytics': typeof AnalyticsIndexRoute;
-  '/api-workspace': typeof ApiWorkspaceIndexRoute;
-  '/documentation': typeof DocumentationIndexRoute;
-  '/notifications': typeof NotificationsIndexRoute;
-  '/profile': typeof ProfileIndexRoute;
-  '/projects': typeof ProjectsIndexRoute;
-  '/search': typeof SearchIndexRoute;
-  '/settings': typeof SettingsIndexRoute;
-  '/tasks': typeof TasksIndexRoute;
-  '/teams': typeof TeamsIndexRoute;
+  '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/landing': typeof LandingRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/session-expired': typeof SessionExpiredRoute
+  '/unauthorized': typeof UnauthorizedRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/onboarding/create-workspace': typeof OnboardingCreateWorkspaceRoute
+  '/onboarding/invite-members': typeof OnboardingInviteMembersRoute
+  '/projects/$id': typeof ProjectsIdRoute
+  '/ai': typeof AiIndexRoute
+  '/analytics': typeof AnalyticsIndexRoute
+  '/api-workspace': typeof ApiWorkspaceIndexRoute
+  '/documentation': typeof DocumentationIndexRoute
+  '/notifications': typeof NotificationsIndexRoute
+  '/profile': typeof ProfileIndexRoute
+  '/projects': typeof ProjectsIndexRoute
+  '/search': typeof SearchIndexRoute
+  '/settings': typeof SettingsIndexRoute
+  '/tasks': typeof TasksIndexRoute
+  '/teams': typeof TeamsIndexRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  '/': typeof IndexRoute;
-  '/dashboard': typeof DashboardRoute;
-  '/forgot-password': typeof ForgotPasswordRoute;
-  '/landing': typeof LandingRoute;
-  '/login': typeof LoginRoute;
-  '/register': typeof RegisterRoute;
-  '/reset-password': typeof ResetPasswordRoute;
-  '/session-expired': typeof SessionExpiredRoute;
-  '/unauthorized': typeof UnauthorizedRoute;
-  '/verify-email': typeof VerifyEmailRoute;
-  '/onboarding/create-workspace': typeof OnboardingCreateWorkspaceRoute;
-  '/onboarding/invite-members': typeof OnboardingInviteMembersRoute;
-  '/projects/$id': typeof ProjectsIdRoute;
-  '/ai/': typeof AiIndexRoute;
-  '/analytics/': typeof AnalyticsIndexRoute;
-  '/api-workspace/': typeof ApiWorkspaceIndexRoute;
-  '/documentation/': typeof DocumentationIndexRoute;
-  '/notifications/': typeof NotificationsIndexRoute;
-  '/profile/': typeof ProfileIndexRoute;
-  '/projects/': typeof ProjectsIndexRoute;
-  '/search/': typeof SearchIndexRoute;
-  '/settings/': typeof SettingsIndexRoute;
-  '/tasks/': typeof TasksIndexRoute;
-  '/teams/': typeof TeamsIndexRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/landing': typeof LandingRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/session-expired': typeof SessionExpiredRoute
+  '/unauthorized': typeof UnauthorizedRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/onboarding/create-workspace': typeof OnboardingCreateWorkspaceRoute
+  '/onboarding/invite-members': typeof OnboardingInviteMembersRoute
+  '/projects/$id': typeof ProjectsIdRoute
+  '/ai/': typeof AiIndexRoute
+  '/analytics/': typeof AnalyticsIndexRoute
+  '/api-workspace/': typeof ApiWorkspaceIndexRoute
+  '/documentation/': typeof DocumentationIndexRoute
+  '/notifications/': typeof NotificationsIndexRoute
+  '/profile/': typeof ProfileIndexRoute
+  '/projects/': typeof ProjectsIndexRoute
+  '/search/': typeof SearchIndexRoute
+  '/settings/': typeof SettingsIndexRoute
+  '/tasks/': typeof TasksIndexRoute
+  '/teams/': typeof TeamsIndexRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/dashboard'
@@ -260,8 +261,8 @@ export interface FileRouteTypes {
     | '/search/'
     | '/settings/'
     | '/tasks/'
-    | '/teams/';
-  fileRoutesByTo: FileRoutesByTo;
+    | '/teams/'
+  fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
@@ -286,7 +287,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/settings'
     | '/tasks'
-    | '/teams';
+    | '/teams'
   id:
     | '__root__'
     | '/'
@@ -312,206 +313,206 @@ export interface FileRouteTypes {
     | '/search/'
     | '/settings/'
     | '/tasks/'
-    | '/teams/';
-  fileRoutesById: FileRoutesById;
+    | '/teams/'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  DashboardRoute: typeof DashboardRoute;
-  ForgotPasswordRoute: typeof ForgotPasswordRoute;
-  LandingRoute: typeof LandingRoute;
-  LoginRoute: typeof LoginRoute;
-  RegisterRoute: typeof RegisterRoute;
-  ResetPasswordRoute: typeof ResetPasswordRoute;
-  SessionExpiredRoute: typeof SessionExpiredRoute;
-  UnauthorizedRoute: typeof UnauthorizedRoute;
-  VerifyEmailRoute: typeof VerifyEmailRoute;
-  OnboardingCreateWorkspaceRoute: typeof OnboardingCreateWorkspaceRoute;
-  OnboardingInviteMembersRoute: typeof OnboardingInviteMembersRoute;
-  ProjectsIdRoute: typeof ProjectsIdRoute;
-  AiIndexRoute: typeof AiIndexRoute;
-  AnalyticsIndexRoute: typeof AnalyticsIndexRoute;
-  ApiWorkspaceIndexRoute: typeof ApiWorkspaceIndexRoute;
-  DocumentationIndexRoute: typeof DocumentationIndexRoute;
-  NotificationsIndexRoute: typeof NotificationsIndexRoute;
-  ProfileIndexRoute: typeof ProfileIndexRoute;
-  ProjectsIndexRoute: typeof ProjectsIndexRoute;
-  SearchIndexRoute: typeof SearchIndexRoute;
-  SettingsIndexRoute: typeof SettingsIndexRoute;
-  TasksIndexRoute: typeof TasksIndexRoute;
-  TeamsIndexRoute: typeof TeamsIndexRoute;
+  IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  LandingRoute: typeof LandingRoute
+  LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  SessionExpiredRoute: typeof SessionExpiredRoute
+  UnauthorizedRoute: typeof UnauthorizedRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
+  OnboardingCreateWorkspaceRoute: typeof OnboardingCreateWorkspaceRoute
+  OnboardingInviteMembersRoute: typeof OnboardingInviteMembersRoute
+  ProjectsIdRoute: typeof ProjectsIdRoute
+  AiIndexRoute: typeof AiIndexRoute
+  AnalyticsIndexRoute: typeof AnalyticsIndexRoute
+  ApiWorkspaceIndexRoute: typeof ApiWorkspaceIndexRoute
+  DocumentationIndexRoute: typeof DocumentationIndexRoute
+  NotificationsIndexRoute: typeof NotificationsIndexRoute
+  ProfileIndexRoute: typeof ProfileIndexRoute
+  ProjectsIndexRoute: typeof ProjectsIndexRoute
+  SearchIndexRoute: typeof SearchIndexRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
+  TasksIndexRoute: typeof TasksIndexRoute
+  TeamsIndexRoute: typeof TeamsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
-      id: '/';
-      path: '/';
-      fullPath: '/';
-      preLoaderRoute: typeof IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
-      id: '/dashboard';
-      path: '/dashboard';
-      fullPath: '/dashboard';
-      preLoaderRoute: typeof DashboardRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/forgot-password': {
-      id: '/forgot-password';
-      path: '/forgot-password';
-      fullPath: '/forgot-password';
-      preLoaderRoute: typeof ForgotPasswordRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/landing': {
-      id: '/landing';
-      path: '/landing';
-      fullPath: '/landing';
-      preLoaderRoute: typeof LandingRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/landing'
+      path: '/landing'
+      fullPath: '/landing'
+      preLoaderRoute: typeof LandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
-      id: '/login';
-      path: '/login';
-      fullPath: '/login';
-      preLoaderRoute: typeof LoginRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
-      id: '/register';
-      path: '/register';
-      fullPath: '/register';
-      preLoaderRoute: typeof RegisterRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
-      id: '/reset-password';
-      path: '/reset-password';
-      fullPath: '/reset-password';
-      preLoaderRoute: typeof ResetPasswordRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/session-expired': {
-      id: '/session-expired';
-      path: '/session-expired';
-      fullPath: '/session-expired';
-      preLoaderRoute: typeof SessionExpiredRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/session-expired'
+      path: '/session-expired'
+      fullPath: '/session-expired'
+      preLoaderRoute: typeof SessionExpiredRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/unauthorized': {
-      id: '/unauthorized';
-      path: '/unauthorized';
-      fullPath: '/unauthorized';
-      preLoaderRoute: typeof UnauthorizedRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof UnauthorizedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/verify-email': {
-      id: '/verify-email';
-      path: '/verify-email';
-      fullPath: '/verify-email';
-      preLoaderRoute: typeof VerifyEmailRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ai/': {
-      id: '/ai/';
-      path: '/ai';
-      fullPath: '/ai/';
-      preLoaderRoute: typeof AiIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/ai/'
+      path: '/ai'
+      fullPath: '/ai/'
+      preLoaderRoute: typeof AiIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/analytics/': {
-      id: '/analytics/';
-      path: '/analytics';
-      fullPath: '/analytics/';
-      preLoaderRoute: typeof AnalyticsIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/analytics/'
+      path: '/analytics'
+      fullPath: '/analytics/'
+      preLoaderRoute: typeof AnalyticsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api-workspace/': {
-      id: '/api-workspace/';
-      path: '/api-workspace';
-      fullPath: '/api-workspace/';
-      preLoaderRoute: typeof ApiWorkspaceIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/api-workspace/'
+      path: '/api-workspace'
+      fullPath: '/api-workspace/'
+      preLoaderRoute: typeof ApiWorkspaceIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/documentation/': {
-      id: '/documentation/';
-      path: '/documentation';
-      fullPath: '/documentation/';
-      preLoaderRoute: typeof DocumentationIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/documentation/'
+      path: '/documentation'
+      fullPath: '/documentation/'
+      preLoaderRoute: typeof DocumentationIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/notifications/': {
-      id: '/notifications/';
-      path: '/notifications';
-      fullPath: '/notifications/';
-      preLoaderRoute: typeof NotificationsIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/notifications/'
+      path: '/notifications'
+      fullPath: '/notifications/'
+      preLoaderRoute: typeof NotificationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/onboarding/create-workspace': {
-      id: '/onboarding/create-workspace';
-      path: '/onboarding/create-workspace';
-      fullPath: '/onboarding/create-workspace';
-      preLoaderRoute: typeof OnboardingCreateWorkspaceRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/onboarding/create-workspace'
+      path: '/onboarding/create-workspace'
+      fullPath: '/onboarding/create-workspace'
+      preLoaderRoute: typeof OnboardingCreateWorkspaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/onboarding/invite-members': {
-      id: '/onboarding/invite-members';
-      path: '/onboarding/invite-members';
-      fullPath: '/onboarding/invite-members';
-      preLoaderRoute: typeof OnboardingInviteMembersRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/onboarding/invite-members'
+      path: '/onboarding/invite-members'
+      fullPath: '/onboarding/invite-members'
+      preLoaderRoute: typeof OnboardingInviteMembersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile/': {
-      id: '/profile/';
-      path: '/profile';
-      fullPath: '/profile/';
-      preLoaderRoute: typeof ProfileIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/profile/'
+      path: '/profile'
+      fullPath: '/profile/'
+      preLoaderRoute: typeof ProfileIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/': {
-      id: '/projects/';
-      path: '/projects';
-      fullPath: '/projects/';
-      preLoaderRoute: typeof ProjectsIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/projects/'
+      path: '/projects'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof ProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projects/$id': {
-      id: '/projects/$id';
-      path: '/projects/$id';
-      fullPath: '/projects/$id';
-      preLoaderRoute: typeof ProjectsIdRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/projects/$id'
+      path: '/projects/$id'
+      fullPath: '/projects/$id'
+      preLoaderRoute: typeof ProjectsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/search/': {
-      id: '/search/';
-      path: '/search';
-      fullPath: '/search/';
-      preLoaderRoute: typeof SearchIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/search/'
+      path: '/search'
+      fullPath: '/search/'
+      preLoaderRoute: typeof SearchIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings/': {
-      id: '/settings/';
-      path: '/settings';
-      fullPath: '/settings/';
-      preLoaderRoute: typeof SettingsIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof SettingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tasks/': {
-      id: '/tasks/';
-      path: '/tasks';
-      fullPath: '/tasks/';
-      preLoaderRoute: typeof TasksIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/tasks/'
+      path: '/tasks'
+      fullPath: '/tasks/'
+      preLoaderRoute: typeof TasksIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/teams/': {
-      id: '/teams/';
-      path: '/teams';
-      fullPath: '/teams/';
-      preLoaderRoute: typeof TeamsIndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+      id: '/teams/'
+      path: '/teams'
+      fullPath: '/teams/'
+      preLoaderRoute: typeof TeamsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -540,7 +541,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsIndexRoute: SettingsIndexRoute,
   TasksIndexRoute: TasksIndexRoute,
   TeamsIndexRoute: TeamsIndexRoute,
-};
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()

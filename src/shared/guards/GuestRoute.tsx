@@ -1,17 +1,12 @@
 import { Navigate } from '@tanstack/react-router';
 import { useAuthStore } from '@/stores/auth';
-import { LoadingFallback } from '@/components/loading-fallback';
 
 export interface GuestRouteProps {
   children: React.ReactNode;
 }
 
 export function GuestRoute({ children }: GuestRouteProps) {
-  const { isAuthenticated, isInitialized, currentWorkspace } = useAuthStore();
-
-  if (!isInitialized) {
-    return <LoadingFallback />;
-  }
+  const { isAuthenticated, currentWorkspace } = useAuthStore();
 
   if (isAuthenticated) {
     if (!currentWorkspace) {

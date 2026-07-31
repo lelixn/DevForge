@@ -1,7 +1,6 @@
 import { Navigate } from '@tanstack/react-router';
 import { useAuthStore } from '@/stores/auth';
 import type { UserRole, Permission } from '@/shared/types/auth.types';
-import { LoadingFallback } from '@/components/loading-fallback';
 
 export interface RoleRouteProps {
   children: React.ReactNode;
@@ -16,11 +15,7 @@ export function RoleRoute({
   permission,
   fallbackTo = '/unauthorized',
 }: RoleRouteProps) {
-  const { isAuthenticated, isInitialized, hasRole, hasPermission } = useAuthStore();
-
-  if (!isInitialized) {
-    return <LoadingFallback />;
-  }
+  const { isAuthenticated, hasRole, hasPermission } = useAuthStore();
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
