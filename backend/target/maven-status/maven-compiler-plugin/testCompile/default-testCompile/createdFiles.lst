@@ -1,5 +1,9 @@
-com\devforge\common\api\ApiResponseTest.class
+com\devforge\auth\service\AuthServiceTest.class
 com\devforge\DevForgeApplicationTests.class
+com\devforge\common\validation\StrongPasswordTest.class
+com\devforge\common\AbstractIntegrationTest.class
+com\devforge\security\JwtTokenProviderTest.class
+com\devforge\common\api\ApiResponseTest.class
+com\devforge\auth\controller\AuthControllerIntegrationTest.class
 com\devforge\common\validation\ValidationTest.class
 com\devforge\config\filter\CorrelationIdFilterTest.class
-com\devforge\common\AbstractIntegrationTest.class
