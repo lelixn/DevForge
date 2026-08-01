@@ -1,20 +1,25 @@
 package com.devforge.common.exception;
 
+import com.devforge.common.constant.ErrorCode;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 public abstract class BaseException extends RuntimeException {
 
-    private final HttpStatus status;
+    private final ErrorCode errorCode;
 
-    protected BaseException(String message, HttpStatus status) {
-        super(message);
-        this.status = status;
+    protected BaseException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 
-    protected BaseException(String message, Throwable cause, HttpStatus status) {
-        super(message, cause);
-        this.status = status;
+    protected BaseException(ErrorCode errorCode, String customMessage) {
+        super(customMessage);
+        this.errorCode = errorCode;
+    }
+
+    protected BaseException(ErrorCode errorCode, String customMessage, Throwable cause) {
+        super(customMessage, cause);
+        this.errorCode = errorCode;
     }
 }

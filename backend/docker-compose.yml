@@ -1,58 +1,68 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:16-alpine
     container_name: devforge-postgres
-    restart: always
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: devforge
-      POSTGRES_USER: devforge_user
-      POSTGRES_PASSWORD: devforge_password
+      POSTGRES_DB: devforge_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U devforge_user -d devforge"]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -U postgres -d devforge_db"]
+      interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - devforge-network
 
   redis:
     image: redis:7-alpine
     container_name: devforge-redis
-    restart: always
+    restart: unless-stopped
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - devforge-network
 
   backend:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: devforge-backend
-    restart: always
+    restart: unless-stopped
     ports:
       - "5000:5000"
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/devforge
-      SPRING_DATASOURCE_USERNAME: devforge_user
-      SPRING_DATASOURCE_PASSWORD: devforge_password
-      SPRING_REDIS_HOST: redis
-      SPRING_REDIS_PORT: 6379
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: devforge_db
+      DB_USER: postgres
+      DB_PASSWORD: postgrespassword
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+    networks:
+      - devforge-network
+
+networks:
+  devforge-network:
+    driver: bridge
 
 volumes:
   postgres_data:

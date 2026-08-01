@@ -1,9 +1,14 @@
 package com.devforge.common.exception;
 
-import org.springframework.http.HttpStatus;
+import com.devforge.common.constant.ErrorCode;
 
 public class UnauthorizedException extends BaseException {
+
     public UnauthorizedException(String message) {
-        super(message, HttpStatus.UNAUTHORIZED);
+        super(ErrorCode.UNAUTHORIZED_ACCESS, message);
+    }
+
+    public UnauthorizedException() {
+        super(ErrorCode.UNAUTHORIZED_ACCESS);
     }
 }

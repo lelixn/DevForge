@@ -1,9 +1,10 @@
 package com.devforge.common.exception;
 
-import org.springframework.http.HttpStatus;
+import com.devforge.common.constant.ErrorCode;
 
 public class ConflictException extends BaseException {
+
     public ConflictException(String message) {
-        super(message, HttpStatus.CONFLICT);
+        super(ErrorCode.RESOURCE_CONFLICT, message);
     }
 }

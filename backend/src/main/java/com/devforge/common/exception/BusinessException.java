@@ -1,9 +1,18 @@
 package com.devforge.common.exception;
 
-import org.springframework.http.HttpStatus;
+import com.devforge.common.constant.ErrorCode;
 
 public class BusinessException extends BaseException {
-    public BusinessException(String message) {
-        super(message, HttpStatus.BAD_REQUEST);
+
+    public BusinessException(ErrorCode errorCode) {
+        super(errorCode);
+    }
+
+    public BusinessException(ErrorCode errorCode, String customMessage) {
+        super(errorCode, customMessage);
+    }
+
+    public BusinessException(ErrorCode errorCode, String customMessage, Throwable cause) {
+        super(errorCode, customMessage, cause);
     }
 }
