@@ -1,3 +1,5 @@
-com\devforge\workspace\WorkspaceServiceTest.class
-com\devforge\user\UserServiceTest.class
-com\devforge\auth\AuthServiceTest.class
+com\devforge\common\api\ApiResponseTest.class
+com\devforge\DevForgeApplicationTests.class
+com\devforge\common\validation\ValidationTest.class
+com\devforge\config\filter\CorrelationIdFilterTest.class
+com\devforge\common\AbstractIntegrationTest.class

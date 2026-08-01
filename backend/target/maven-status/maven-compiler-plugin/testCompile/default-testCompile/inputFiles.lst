@@ -1,3 +1,5 @@
-D:\DevForge\backend\src\test\java\com\devforge\auth\AuthServiceTest.java
-D:\DevForge\backend\src\test\java\com\devforge\user\UserServiceTest.java
-D:\DevForge\backend\src\test\java\com\devforge\workspace\WorkspaceServiceTest.java
+D:\DevForge\backend\src\test\java\com\devforge\common\AbstractIntegrationTest.java
+D:\DevForge\backend\src\test\java\com\devforge\common\api\ApiResponseTest.java
+D:\DevForge\backend\src\test\java\com\devforge\common\validation\ValidationTest.java
+D:\DevForge\backend\src\test\java\com\devforge\config\filter\CorrelationIdFilterTest.java
+D:\DevForge\backend\src\test\java\com\devforge\DevForgeApplicationTests.java

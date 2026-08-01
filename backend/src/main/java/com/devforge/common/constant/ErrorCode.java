@@ -1,9 +1,7 @@
 package com.devforge.common.constant;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-@Getter
 public enum ErrorCode {
 
     INVALID_INPUT("ERR_40001", "Invalid input parameters provided.", HttpStatus.BAD_REQUEST),
@@ -25,5 +23,17 @@ public enum ErrorCode {
         this.code = code;
         this.message = message;
         this.httpStatus = httpStatus;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
     }
 }
